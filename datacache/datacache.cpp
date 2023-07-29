@@ -691,7 +691,7 @@ unsigned CDataCacheSection::Purge( unsigned nBytes )
 		if ( DiscardItem( hCurrent, DC_FLUSH_DISCARD  ) )
 		{
 			nBytesPurged += nBytesCurrent;
-			nBytes -= min( nBytesCurrent, nBytes );
+			nBytes -= std::min( nBytesCurrent, nBytes );
 		}
 		hCurrent = hNext;
 	}
