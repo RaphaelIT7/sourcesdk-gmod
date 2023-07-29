@@ -1614,7 +1614,139 @@ void CStudioHdr::RunFlexRules( const float *src, float *dest )
 //-----------------------------------------------------------------------------
 #define iabs(i) (( (i) >= 0 ) ? (i) : -(i) )
 
+// TODO: Move this into a seperate file!
 CUtlSymbolTable g_ActivityModifiersTable;
+
+#include "stringregistry.h"
+CStringRegistry	g_ActivityStrings;
+static int g_HighestActivity = 0;
+struct activitylist_t
+{
+	int					activityIndex;
+	unsigned short		stringKey;
+	short				isPrivate;
+};
+CUtlVector<activitylist_t> g_ActivityList;
+// get the database entry from a string
+static activitylist_t* ListFromString(const char* pString)
+{
+	// just use the string registry to do this search/map
+	int stringID = g_ActivityStrings.GetStringID(pString);
+	if (stringID < 0)
+		return NULL;
+
+	return &g_ActivityList[stringID];
+}
+
+
+// Get the index for a given activity name
+// Done at load time for all models
+#include "shareddefs.h"
+int ActivityList_IndexForName(const char* pszActivityName)
+{
+	// this is a fast O(lgn) search (actually does 2 O(lgn) searches)
+	activitylist_t* pList = ListFromString(pszActivityName);
+
+	if (pList)
+	{
+		return pList->activityIndex;
+	}
+
+	return kActivityLookup_Missing;
+}
+
+const char* GetSequenceActivityName(CStudioHdr* pstudiohdr, int iSequence)
+{
+	if (!pstudiohdr || iSequence < 0 || iSequence >= pstudiohdr->GetNumSeq())
+	{
+		if (pstudiohdr)
+		{
+			Msg("Bad sequence in GetSequenceActivityName() for model '%s'!\n", pstudiohdr->pszName());
+		}
+		return "Unknown";
+	}
+
+	mstudioseqdesc_t& seqdesc = pstudiohdr->pSeqdesc(iSequence);
+	return seqdesc.pszActivityName();
+}
+
+// add a new activity to the database
+activitylist_t* ActivityList_AddActivityEntry(const char* pName, int iActivityIndex, bool isPrivate)
+{
+	MEM_ALLOC_CREDIT();
+	int index = g_ActivityList.AddToTail();
+	activitylist_t* pList = &g_ActivityList[index];
+	pList->activityIndex = iActivityIndex;
+	pList->stringKey = g_ActivityStrings.AddString(pName, index);
+	pList->isPrivate = isPrivate;
+
+	// UNDONE: This implies that ALL shared activities are added before ANY custom activities
+	// UNDONE: Segment these instead?  It's a 32-bit int, how many activities do we need?
+	if (iActivityIndex > g_HighestActivity)
+	{
+		g_HighestActivity = iActivityIndex;
+	}
+
+	return pList;
+}
+
+#include "ai_activity.h"
+Activity ActivityList_RegisterPrivateActivity(const char* pszActivityName)
+{
+	activitylist_t* pList = ListFromString(pszActivityName);
+	if (pList)
+	{
+		// this activity is already in the list. If the activity we collided with is also private, 
+		// then the collision is OK. Otherwise, it's a bug.
+		if (pList->isPrivate)
+		{
+			return (Activity)pList->activityIndex;
+		}
+		else
+		{
+			// this private activity collides with a shared activity. That is not allowed.
+			Warning("***\nShared<->Private Activity collision!\n***\n");
+			Assert(0);
+			return ACT_INVALID;
+		}
+	}
+
+	pList = ActivityList_AddActivityEntry(pszActivityName, g_HighestActivity + 1, true);
+	return (Activity)pList->activityIndex;
+}
+
+
+void SetActivityForSequence(CStudioHdr* pstudiohdr, int i)
+{
+	int iActivityIndex;
+	const char* pszActivityName;
+	mstudioseqdesc_t& seqdesc = pstudiohdr->pSeqdesc(i);
+
+	seqdesc.flags |= STUDIO_ACTIVITY;
+
+	pszActivityName = GetSequenceActivityName(pstudiohdr, i);
+	if (pszActivityName[0] != '\0')
+	{
+		iActivityIndex = ActivityList_IndexForName(pszActivityName);
+
+		if (iActivityIndex == -1)
+		{
+			// Allow this now.  Animators can create custom activities that are referenced only on the client or by scripts, etc.
+			//Warning( "***\nModel %s tried to reference unregistered activity: %s \n***\n", pstudiohdr->name, pszActivityName );
+			//Assert(0);
+			// HACK: the client and server don't share the private activity list so registering it on the client would hose the server
+#ifdef CLIENT_DLL
+			seqdesc.flags &= ~STUDIO_ACTIVITY;
+#else
+			seqdesc.activity = ActivityList_RegisterPrivateActivity(pszActivityName);
+#endif
+		}
+		else
+		{
+			seqdesc.activity = iActivityIndex;
+		}
+	}
+}
 
 extern void SetActivityForSequence( CStudioHdr *pstudiohdr, int i );
 void CStudioHdr::CActivityToSequenceMapping::Initialize( CStudioHdr * __restrict pstudiohdr )

@@ -65,9 +65,7 @@ bool g_VProfSignalSpike;
 
 //-----------------------------------------------------------------------------
 
-CVProfile g_VProfCurrentProfile;
-
-int CVProfNode::s_iCurrentUniqueNodeID = 0;
+//CVProfile g_VProfCurrentProfile;
 
 CVProfNode::~CVProfNode()
 {

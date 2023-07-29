@@ -333,7 +333,7 @@ private:
 		return m_iUniqueNodeID;
 	}
 
-	static int s_iCurrentUniqueNodeID;
+	int s_iCurrentUniqueNodeID = 0;
 
 
 private:
