@@ -6,7 +6,6 @@
 
 #include "pch_tier0.h"
 #define WINDOWS_LEAN_AND_MEAN
-#include <windows.h>
 
 #pragma warning( disable : 4530 )   // warning: exception handler -GX option
 
