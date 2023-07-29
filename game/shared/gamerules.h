@@ -435,8 +435,8 @@ private:
 #endif
 
 
-abstract_class CGMODRules : public CGameRules {
-}
+abstract_class CGMODRules : public CGameRules{
+};
 
 extern ConVar g_Language;
 

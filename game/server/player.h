@@ -1558,7 +1558,7 @@ int CollectHumanPlayers( CUtlVector< T * > *playerVector, int team = TEAM_ANY, b
 	return playerVector->Count();
 }
 
-abstract class CGMOD_Player : class CBasePlayer {
+class CGMOD_Player : CBasePlayer {
 	// int m_iGModPlayerFlag
 };
 
