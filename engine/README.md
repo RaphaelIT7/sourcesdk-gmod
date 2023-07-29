@@ -1,0 +1,1 @@
+This folder will contain some engine classes and functions that which got added/modified in gmod.
