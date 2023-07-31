@@ -93,7 +93,7 @@ public: // IClientMessageHandlers
 	PROCESS_CLC_MESSAGE( SaveReplay );
 #endif
 	PROCESS_CLC_MESSAGE( CmdKeyValues );
-	PROCESS_CLC_MESSAGE( CLC_GMod_ClientToServer );
+	PROCESS_CLC_MESSAGE( GMod_ClientToServer );
 	
 public:
 

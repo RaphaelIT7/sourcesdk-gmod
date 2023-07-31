@@ -2,8 +2,13 @@
 
 SourceSDK for Gmod based of [sourcesdk-minimal](https://github.com/danielga/sourcesdk-minimal)
 
+In the future, I'm going to make more projects that recreate gmod dlls.
+Currently, these dlls exist that can replace the given gmod dll:
+[datacache](https://github.com/RaphaelIT7/gmod-datacache)
+
 ## my ToDo
 - [ ] Add Proper readme.
+- [ ] Fix PMELib.h and pme.cpp for Linux
 
 Add more Gmod functions & find out where these belong to:  
 dedicated_srv.so  
