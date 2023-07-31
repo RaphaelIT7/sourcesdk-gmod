@@ -18,6 +18,7 @@ extern "C" void __cpuid(int* CPUInfo, int InfoType);
 
  */
 typedef	unsigned			bit;
+typedef	unsigned char		cbyte;
 
 enum CPUVendor
 {
@@ -67,10 +68,10 @@ public:
 
 	struct misc_t
 	{
-		byte	Brand;
-		byte	CLFLUSH;
-		byte	Reserved;
-		byte	APICId;
+		cbyte	Brand;
+		cbyte	CLFLUSH;
+		cbyte	Reserved;
+		cbyte	APICId;
 	};
 
 	struct feature_t
@@ -117,7 +118,7 @@ public:
 	version_t version;
 	misc_t misc;
 	feature_t feature;
-	byte *cache;
+	cbyte *cache;
 
 	ia32detect ()
 	{
@@ -273,7 +274,7 @@ private:
 				c[(d >> i) & 0xFF] = true;
 	}
 
-	void init2 (byte count)
+	void init2 (cbyte count)
 	{
 		uint32 d[4];
 		bool c[256];
@@ -313,7 +314,7 @@ private:
 			if (c[ci2])
 				m++;
 
-		cache = new byte[m];
+		cache = new cbyte[m];
 
 		m = 0;
 
