@@ -358,7 +358,6 @@ public:
 
 	static bool				m_bInDebugSelect;
 	static int				m_nDebugPlayer;
-	// int m_iGMODFlags
 
 protected:
 
@@ -415,7 +414,6 @@ public:
 	virtual bool			TestCollision( const Ray_t& ray, unsigned int mask, trace_t& trace );
 	virtual	bool			TestHitboxes( const Ray_t &ray, unsigned int fContentsMask, trace_t& tr );
 	virtual void			ComputeWorldSpaceSurroundingBox( Vector *pWorldMins, Vector *pWorldMaxs );
-	// virtual ???? GMOD_VPhysicsCollision(????)
 
 	// non-virtual methods. Don't override these!
 public:
@@ -594,8 +592,10 @@ public:
 
 	bool		NameMatches( const char *pszNameOrWildcard );
 	bool		ClassMatches( const char *pszClassOrWildcard );
+#ifndef NO_STRING_T
 	bool		NameMatches( string_t nameStr );
 	bool		ClassMatches( string_t nameStr );
+#endif
 
 private:
 	bool		NameMatchesComplex( const char *pszNameOrWildcard );
@@ -1098,7 +1098,11 @@ public:
 #ifdef GNUC
 #define ENTITYFUNCPTR_SIZE	8
 #else
+#ifdef PLATFORM_64BITS
+#define ENTITYFUNCPTR_SIZE	8
+#else
 #define ENTITYFUNCPTR_SIZE	4
+#endif
 #endif
 
 	void FunctionCheck( void *pFunction, const char *name );
@@ -1999,12 +2003,14 @@ inline bool CBaseEntity::NameMatches( const char *pszNameOrWildcard )
 	return NameMatchesComplex( pszNameOrWildcard );
 }
 
+#ifndef NO_STRING_T
 inline bool CBaseEntity::NameMatches( string_t nameStr )
 {
 	if ( IDENT_STRINGS(m_iName, nameStr) )
 		return true;
 	return NameMatchesComplex( STRING(nameStr) );
 }
+#endif
 
 inline bool CBaseEntity::ClassMatches( const char *pszClassOrWildcard )
 {
@@ -2018,13 +2024,14 @@ inline const char* CBaseEntity::GetClassname()
 	return STRING(m_iClassname);
 }
 
-
+#ifndef NO_STRING_T
 inline bool CBaseEntity::ClassMatches( string_t nameStr )
 {
 	if ( IDENT_STRINGS(m_iClassname, nameStr ) )
 		return true;
 	return ClassMatchesComplex( STRING(nameStr) );
 }
+#endif
 
 inline int CBaseEntity::GetSpawnFlags( void ) const
 { 

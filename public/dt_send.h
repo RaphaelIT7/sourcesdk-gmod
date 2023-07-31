@@ -625,7 +625,6 @@ void SendProxy_Int32ToInt32		( const SendProp *pProp, const void *pStruct, const
 void SendProxy_Int64ToInt64		( const SendProp *pProp, const void *pStruct, const void *pData, DVariant *pOut, int iElement, int objectID );
 #endif
 void SendProxy_StringToString	( const SendProp *pProp, const void *pStruct, const void *pData, DVariant *pOut, int iElement, int objectID );
-//void* SendProxy_GMODTableToGMODTable( const SendProp *pProp, const void *pStruct, const void *pVarData, DVariant *pOut, int iElement, int objectID );
 
 // pData is the address of a data table.
 void* SendProxy_DataTableToDataTable( const SendProp *pProp, const void *pStructBase, const void *pData, CSendProxyRecipients *pRecipients, int objectID );
@@ -634,7 +633,7 @@ void* SendProxy_DataTableToDataTable( const SendProp *pProp, const void *pStruct
 void* SendProxy_DataTablePtrToDataTable( const SendProp *pProp, const void *pStructBase, const void *pData, CSendProxyRecipients *pRecipients, int objectID );
 
 // Used on player entities - only sends the data to the local player (objectID-1).
-void* SendProxy_DataTableToDataTable( const SendProp *pProp, const void *pStructBase, const void *pData, CSendProxyRecipients *pRecipients, int objectID );
+void* SendProxy_SendLocalDataTable( const SendProp *pProp, const void *pStruct, const void *pVarData, CSendProxyRecipients *pRecipients, int objectID );
 
 
 // ------------------------------------------------------------------------ //
@@ -742,12 +741,6 @@ SendProp SendPropArray3(
 	SendTableProxyFn varProxy=SendProxy_DataTableToDataTable
 	);
 
-/*
-SendProp SendPropGMODTable(
-	const char *pVarName,
-	int offset,
-	);
-*/
 
 
 // Use the macro to let it automatically generate a table name. You shouldn't 

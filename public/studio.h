@@ -11,6 +11,8 @@
 
 #ifdef _WIN32
 #pragma once
+#pragma warning(push)
+#pragma warning(disable: 4244)
 #endif
 
 #include "basetypes.h"
@@ -239,7 +241,7 @@ struct mstudiobone_t
 {
 	DECLARE_BYTESWAP_DATADESC();
 	int					sznameindex;
-	inline char * const pszName( void ) const { return ((char *)this) + sznameindex; }
+	inline const char	*pszName( void ) const { return ((char *)this) + sznameindex; }
 	int		 			parent;		// parent bone
 	int					bonecontroller[6];	// bone controller index, -1 == none
 
@@ -259,7 +261,7 @@ struct mstudiobone_t
 	mutable int			physicsbone;	// index into physically simulated bone
 	inline void *pProcedure( ) const { if (procindex == 0) return NULL; else return  (void *)(((byte *)this) + procindex); };
 	int					surfacepropidx;	// index into string tablefor property name
-	inline char * const pszSurfaceProp( void ) const { return ((char *)this) + surfacepropidx; }
+	inline const char	*pszSurfaceProp( void ) const { return ((char *)this) + surfacepropidx; }
 	int					contents;		// See BSPFlags.h for the contents flags
 
 	int					unused[8];		// remove as appropriate
@@ -447,9 +449,9 @@ struct mstudiomodelgroup_t
 {
 	DECLARE_BYTESWAP_DATADESC();
 	int					szlabelindex;	// textual name
-	inline char * const pszLabel( void ) const { return ((char *)this) + szlabelindex; }
+	inline const char	*pszLabel( void ) const { return ((char *)this) + szlabelindex; }
 	int					sznameindex;	// file name
-	inline char * const pszName( void ) const { return ((char *)this) + sznameindex; }
+	inline const char	*pszName( void ) const { return ((char *)this) + sznameindex; }
 };
 
 struct mstudiomodelgrouplookup_t
@@ -465,11 +467,11 @@ struct mstudioevent_t
 	float				cycle;
 	int					event;
 	int					type;
-	inline const char * pszOptions( void ) const { return options; }
+	inline const char	*pszOptions( void ) const { return options; }
 	char				options[64];
 
 	int					szeventindex;
-	inline char * const pszEventName( void ) const { return ((char *)this) + szeventindex; }
+	inline const char	*pszEventName( void ) const { return ((char *)this) + szeventindex; }
 };
 
 #define	ATTACHMENT_FLAG_WORLD_ALIGN 0x10000
@@ -479,7 +481,7 @@ struct mstudioattachment_t
 {
 	DECLARE_BYTESWAP_DATADESC();
 	int					sznameindex;
-	inline char * const pszName( void ) const { return ((char *)this) + sznameindex; }
+	inline const char	*pszName( void ) const { return ((char *)this) + sznameindex; }
 	unsigned int		flags;
 	int					localbone;
 	matrix3x4_t			local; // attachment point
@@ -561,7 +563,7 @@ struct mstudioikrule_t
 	int			unused8;
 
 	int			szattachmentindex;		// name of world attachment
-	inline char * const pszAttachment( void ) const { return ((char *)this) + szattachmentindex; }
+	inline const char *pszAttachment( void ) const { return ((char *)this) + szattachmentindex; }
 
 	int			unused[7];
 
@@ -694,7 +696,7 @@ struct mstudioanimdesc_t
 	inline studiohdr_t	*pStudiohdr( void ) const { return (studiohdr_t *)(((byte *)this) + baseptr); }
 
 	int					sznameindex;
-	inline char * const pszName( void ) const { return ((char *)this) + sznameindex; }
+	inline const char	*pszName( void ) const { return ((char *)this) + sznameindex; }
 
 	float				fps;		// frames per second	
 	int					flags;		// looping/non-looping flags
@@ -704,7 +706,7 @@ struct mstudioanimdesc_t
 	// piecewise movement
 	int					nummovements;
 	int					movementindex;
-	inline mstudiomovement_t * const pMovement( int i ) const { return (mstudiomovement_t *)(((byte *)this) + movementindex) + i; };
+	inline const mstudiomovement_t *pMovement( int i ) const { return (mstudiomovement_t *)(((byte *)this) + movementindex) + i; };
 
 	int					unused1[6];			// remove as appropriate (and zero if loading older versions)	
 
@@ -725,7 +727,7 @@ struct mstudioanimdesc_t
 
 	int					sectionindex;
 	int					sectionframes; // number of frames used in each fast lookup section, zero if not used
-	inline mstudioanimsections_t * const pSection( int i ) const { return (mstudioanimsections_t *)(((byte *)this) + sectionindex) + i; }
+	inline const mstudioanimsections_t *pSection( int i ) const { return (mstudioanimsections_t *)(((byte *)this) + sectionindex) + i; }
 
 	short				zeroframespan;	// frames per span
 	short				zeroframecount; // number of spans
@@ -771,10 +773,10 @@ struct mstudioseqdesc_t
 	inline studiohdr_t	*pStudiohdr( void ) const { return (studiohdr_t *)(((byte *)this) + baseptr); }
 
 	int					szlabelindex;
-	inline char * const pszLabel( void ) const { return ((char *)this) + szlabelindex; }
+	inline const char	*pszLabel( void ) const { return ((char *)this) + szlabelindex; }
 
 	int					szactivitynameindex;
-	inline char * const pszActivityName( void ) const { return ((char *)this) + szactivitynameindex; }
+	inline const char	*pszActivityName( void ) const { return ((char *)this) + szactivitynameindex; }
 
 	int					flags;		// looping/non-looping flags
 
@@ -855,7 +857,7 @@ struct mstudioseqdesc_t
 	// Key values
 	int					keyvalueindex;
 	int					keyvaluesize;
-	inline const char * KeyValueText( void ) const { return keyvaluesize != 0 ? ((char *)this) + keyvalueindex : NULL; }
+	inline const char	*KeyValueText( void ) const { return keyvaluesize != 0 ? ((char *)this) + keyvalueindex : NULL; }
 
 	int					cycleposeindex;		// index of pose parameter to use as cycle index
 
@@ -876,7 +878,7 @@ struct mstudioposeparamdesc_t
 {
 	DECLARE_BYTESWAP_DATADESC();
 	int					sznameindex;
-	inline char * const pszName( void ) const { return ((char *)this) + sznameindex; }
+	inline const char	*pszName( void ) const { return ((char *)this) + sznameindex; }
 	int					flags;	// ????
 	float				start;	// starting value
 	float				end;	// ending value
@@ -887,7 +889,7 @@ struct mstudioflexdesc_t
 {
 	DECLARE_BYTESWAP_DATADESC();
 	int					szFACSindex;
-	inline char * const pszFACS( void ) const { return ((char *)this) + szFACSindex; }
+	inline const char	*pszFACS( void ) const { return ((char *)this) + szFACSindex; }
 };
 
 
@@ -896,9 +898,9 @@ struct mstudioflexcontroller_t
 {
 	DECLARE_BYTESWAP_DATADESC();
 	int					sztypeindex;
-	inline char * const pszType( void ) const { return ((char *)this) + sztypeindex; }
+	inline const char	*pszType( void ) const { return ((char *)this) + sztypeindex; }
 	int					sznameindex;
-	inline char * const pszName( void ) const { return ((char *)this) + sznameindex; }
+	inline const char	*pszName( void ) const { return ((char *)this) + sznameindex; }
 	mutable int			localToGlobal;	// remapped at load time to master list
 	float				min;
 	float				max;
@@ -919,7 +921,7 @@ struct mstudioflexcontrollerui_t
 {
 	DECLARE_BYTESWAP_DATADESC();
 	int					sznameindex;
-	inline char * const pszName( void ) const { return ((char *)this) + sznameindex; }
+	inline const char	*pszName( void ) const { return ((char *)this) + sznameindex; }
 
 	// These are used like a union to save space
 	// Here are the possible configurations for a UI controller
@@ -937,28 +939,28 @@ struct mstudioflexcontrollerui_t
 	{
 		return !stereo ? (mstudioflexcontroller_t *)( (char *)this + szindex0 ) : NULL;
 	}
-	inline char * const	pszControllerName( void ) const { return !stereo ? pController()->pszName() : NULL; }
+	inline const char	*pszControllerName( void ) const { return !stereo ? pController()->pszName() : NULL; }
 	inline int			controllerIndex( const CStudioHdr &cStudioHdr ) const;
 
 	inline const mstudioflexcontroller_t *pLeftController( void ) const
 	{
 		return stereo ? (mstudioflexcontroller_t *)( (char *)this + szindex0 ) : NULL;
 	}
-	inline char * const	pszLeftName( void ) const { return stereo ? pLeftController()->pszName() : NULL; }
+	inline const char *pszLeftName( void ) const { return stereo ? pLeftController()->pszName() : NULL; }
 	inline int			leftIndex( const CStudioHdr &cStudioHdr ) const;
 
 	inline const mstudioflexcontroller_t *pRightController( void ) const
 	{
 		return stereo ? (mstudioflexcontroller_t *)( (char *)this + szindex1 ): NULL;
 	}
-	inline char * const	pszRightName( void ) const { return stereo ? pRightController()->pszName() : NULL; }
+	inline const char	*pszRightName( void ) const { return stereo ? pRightController()->pszName() : NULL; }
 	inline int			rightIndex( const CStudioHdr &cStudioHdr ) const;
 
 	inline const mstudioflexcontroller_t *pNWayValueController( void ) const
 	{
 		return remaptype == FLEXCONTROLLER_REMAP_NWAY ? (mstudioflexcontroller_t *)( (char *)this + szindex2 ) : NULL;
 	}
-	inline char * const	pszNWayValueName( void ) const { return remaptype == FLEXCONTROLLER_REMAP_NWAY ? pNWayValueController()->pszName() : NULL; }
+	inline const char	*pszNWayValueName( void ) const { return remaptype == FLEXCONTROLLER_REMAP_NWAY ? pNWayValueController()->pszName() : NULL; }
 	inline int			nWayValueIndex( const CStudioHdr &cStudioHdr ) const;
 
 	// Number of controllers this ui description contains, 1, 2 or 3
@@ -1188,7 +1190,7 @@ struct mstudiotexture_t
 {
 	DECLARE_BYTESWAP_DATADESC();
 	int						sznameindex;
-	inline char * const		pszName( void ) const { return ((char *)this) + sznameindex; }
+	inline const char		*pszName( void ) const { return ((char *)this) + sznameindex; }
 	int						flags;
 	int						used;
     int						unused1;
@@ -1203,7 +1205,7 @@ struct mstudioeyeball_t
 {
 	DECLARE_BYTESWAP_DATADESC();
 	int					sznameindex;
-	inline char * const pszName( void ) const { return ((char *)this) + sznameindex; }
+	inline const char	*pszName( void ) const { return ((char *)this) + sznameindex; }
 	int		bone;
 	Vector	org;
 	float	zoffset;
@@ -1253,7 +1255,7 @@ struct mstudioikchain_t
 {
 	DECLARE_BYTESWAP_DATADESC();
 	int				sznameindex;
-	inline char * const pszName( void ) const { return ((char *)this) + sznameindex; }
+	inline const char *pszName( void ) const { return ((char *)this) + sznameindex; }
 	int				linktype;
 	int				numlinks;
 	int				linkindex;
@@ -1600,7 +1602,7 @@ struct mstudiobodyparts_t
 {
 	DECLARE_BYTESWAP_DATADESC();
 	int					sznameindex;
-	inline char * const pszName( void ) const { return ((char *)this) + sznameindex; }
+	inline const char	*pszName( void ) const { return ((char *)this) + sznameindex; }
 	int					nummodels;
 	int					base;
 	int					modelindex; // index into models array
@@ -1625,7 +1627,7 @@ struct mstudiohitboxset_t
 {
 	DECLARE_BYTESWAP_DATADESC();
 	int					sznameindex;
-	inline char * const	pszName( void ) const { return ((char *)this) + sznameindex; }
+	inline const char	*pszName( void ) const { return ((char *)this) + sznameindex; }
 	int					numhitboxes;
 	int					hitboxindex;
 	inline mstudiobbox_t *pHitbox( int i ) const { return (mstudiobbox_t *)(((byte *)this) + hitboxindex) + i; };
@@ -1771,7 +1773,7 @@ struct thinModelVertices_t
 	{
 		Assert( ( m_numBoneInfluences  >= 1 ) && ( m_numBoneInfluences  <= 3 ) );
 		Assert( ( boneWeights.numbones >= 1 ) && ( boneWeights.numbones <= m_numBoneInfluences ) );
-		int    numStoredWeights = MAX( 0, ( m_numBoneInfluences - 1 ) );
+		int    numStoredWeights = std::max( 0, ( m_numBoneInfluences - 1 ) );
 		float *pBaseWeight	= m_boneWeights + vertIndex*numStoredWeights;
 		char  *pBaseIndex	= m_boneIndices + vertIndex*m_numBoneInfluences;
 		for ( int i = 0; i < m_numBoneInfluences; i++ )
@@ -1841,7 +1843,7 @@ private:
 		Assert( pBoneWeights );
 		Assert( ( m_numBoneInfluences <= 1 ) || ( m_boneWeights != NULL ) );
 		Assert( ( m_numBoneInfluences <= 0 ) || ( m_boneIndices != NULL ) );
-		int    numStoredWeights = MAX( 0, ( m_numBoneInfluences - 1 ) );
+		int    numStoredWeights = std::max( 0, ( m_numBoneInfluences - 1 ) );
 		float *pBaseWeight	= m_boneWeights + vertIndex*numStoredWeights;
 		char  *pBaseIndex	= m_boneIndices + vertIndex*m_numBoneInfluences;
 		float  sum			= 0.0f;
@@ -2230,12 +2232,12 @@ struct studiohdr_t
 	int					GetSharedPoseParameter( int iSequence, int iLocalPose ) const;
 
 	int					surfacepropindex;
-	inline char * const pszSurfaceProp( void ) const { return ((char *)this) + surfacepropindex; }
+	inline const char	*pszSurfaceProp( void ) const { return ((char *)this) + surfacepropindex; }
 
 	// Key values
 	int					keyvalueindex;
 	int					keyvaluesize;
-	inline const char * KeyValueText( void ) const { return keyvaluesize != 0 ? ((char *)this) + keyvalueindex : NULL; }
+	inline const char	*KeyValueText( void ) const { return keyvaluesize != 0 ? ((char *)this) + keyvalueindex : NULL; }
 
 	int					numlocalikautoplaylocks;
 	int					localikautoplaylockindex;
@@ -2264,7 +2266,7 @@ struct studiohdr_t
 
 	// for demand loaded animation blocks
 	int					szanimblocknameindex;	
-	inline char * const pszAnimBlockName( void ) const { return ((char *)this) + szanimblocknameindex; }
+	inline const char	*pszAnimBlockName( void ) const { return ((char *)this) + szanimblocknameindex; }
 	int					numanimblocks;
 	int					animblockindex;
 	inline mstudioanimblock_t *pAnimBlock( int i ) const { Assert( i > 0 && i < numanimblocks); return (mstudioanimblock_t *)(((byte *)this) + animblockindex) + i; };
@@ -2461,7 +2463,7 @@ public:
 
 	inline int			flags() const { return m_pStudioHdr->flags; };
 
-	inline char			*const pszSurfaceProp( void ) const { return m_pStudioHdr->pszSurfaceProp(); };
+	inline const char	*pszSurfaceProp( void ) const { return m_pStudioHdr->pszSurfaceProp(); };
 
 	inline float		mass() const { return m_pStudioHdr->mass; };
 	inline int			contents() const { return m_pStudioHdr->contents; }
@@ -2586,10 +2588,11 @@ public:
 
 		// ctor
 		CActivityToSequenceMapping( void ) 
-			: m_pSequenceTuples(NULL), m_iSequenceTuplesCount(0), m_ActToSeqHash(8,0,0), m_expectedPStudioHdr(NULL), m_expectedVModel(NULL) 
+			: m_pSequenceTuples(NULL), m_iSequenceTuplesCount(0),
 #if STUDIO_SEQUENCE_ACTIVITY_LAZY_INITIALIZE
-			, m_bIsInitialized(false) 
+			m_bIsInitialized(false),
 #endif
+			m_ActToSeqHash(8,0,0), m_expectedPStudioHdr(NULL), m_expectedVModel(NULL) 
 		{};
 
 		// dtor -- not virtual because this class has no inheritors
@@ -3225,5 +3228,9 @@ inline int Studio_LoadVertexes( const vertexFileHeader_t *pTempVvdHdr, vertexFil
 
 	return target;
 }
+
+#ifdef _WIN32
+#pragma warning(pop)
+#endif
 
 #endif // STUDIO_H

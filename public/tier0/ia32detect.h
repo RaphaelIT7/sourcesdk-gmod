@@ -1,24 +1,23 @@
-//========= Copyright Valve Corporation, All rights reserved. ============//
+//===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
 //
 // Purpose: 
 //
 // $NoKeywords: $
 //
-//=============================================================================//
+//===========================================================================//
 #ifndef IA32DETECT_H
 #define IA32DETECT_H
 
-#ifdef PLATFORM_WINDOWS_PC
-#include <intrin.h>
-#endif
-
+//#ifdef COMPILER_MSVC64
+extern "C" void __cpuid(int* CPUInfo, int InfoType);
+#pragma intrinsic (__cpuid)
+//#endif
 /*
     This section from http://iss.cs.cornell.edu/ia32.htm
 
 
  */
 typedef	unsigned			bit;
-typedef	unsigned char		cbyte;
 
 enum CPUVendor
 {
@@ -68,10 +67,10 @@ public:
 
 	struct misc_t
 	{
-		cbyte	Brand;
-		cbyte	CLFLUSH;
-		cbyte	Reserved;
-		cbyte	APICId;
+		byte	Brand;
+		byte	CLFLUSH;
+		byte	Reserved;
+		byte	APICId;
 	};
 
 	struct feature_t
@@ -118,7 +117,7 @@ public:
 	version_t version;
 	misc_t misc;
 	feature_t feature;
-	cbyte *cache;
+	byte *cache;
 
 	ia32detect ()
 	{
@@ -130,12 +129,12 @@ public:
 
 		for (uint32 i = 1; i <= m; i++)
 		{
+
 #ifdef COMPILER_MSVC64
 			__cpuid((int *) (d + (i-1) * 4), i);
 
 #else
 			uint32 *t = d + (i - 1) * 4;
-
 			__asm
 			{
 				mov	eax, i;
@@ -274,7 +273,7 @@ private:
 				c[(d >> i) & 0xFF] = true;
 	}
 
-	void init2 (cbyte count)
+	void init2 (byte count)
 	{
 		uint32 d[4];
 		bool c[256];
@@ -314,7 +313,7 @@ private:
 			if (c[ci2])
 				m++;
 
-		cache = new cbyte[m];
+		cache = new byte[m];
 
 		m = 0;
 

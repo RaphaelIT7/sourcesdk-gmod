@@ -396,13 +396,6 @@ RecvProp InternalRecvPropArray(
 	ArrayLengthRecvProxyFn proxy
 	);
 
-/*
-RecvProp RecvPropGMODTable(
-	const char *pVarName,
-	int offset,
-	);
-*/
-
 
 //
 // Use this if you want to completely manage the way the array data is stored.

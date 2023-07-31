@@ -105,7 +105,6 @@ class CLC_FileCRCCheck;
 class CLC_FileMD5Check;
 class CLC_SaveReplay;
 class CLC_CmdKeyValues;
-class CLC_GMod_ClientToServer;
 
 class IClientMessageHandler : public INetMessageHandler
 {
@@ -150,7 +149,6 @@ class SVC_Menu;
 class SVC_GameEventList;
 class SVC_GetCvarValue;
 class SVC_CmdKeyValues;
-class SVC_GMod_ServerToClient;
 
 class IServerMessageHandler : public INetMessageHandler
 {
@@ -184,7 +182,6 @@ public:
 	PROCESS_SVC_MESSAGE( GameEventList ) = 0;
 	PROCESS_SVC_MESSAGE( GetCvarValue ) = 0;
 	PROCESS_SVC_MESSAGE( CmdKeyValues ) = 0;
-	PROCESS_SVC_MESSAGE( GMod_ServerToClient ) = 0;
 };
 
 class MM_Heartbeat;
@@ -206,7 +203,7 @@ public:
 	PROCESS_MM_MESSAGE( RegisterResponse ) = 0;
 	PROCESS_MM_MESSAGE( Migrate ) = 0;
 	PROCESS_MM_MESSAGE( Mutelist ) = 0;
-	PROCESS_MM_MESSAGE( Checkpoint ) = 0;
+	PROCESS_MM_MESSAGE( Checkpoint) = 0;
 };
 
 class IConnectionlessPacketHandler

@@ -18,9 +18,10 @@
 #include "tier1/utlvector.h"
 #include "materialsystem/imaterial.h"
 #include "materialsystem/imaterialsystem.h"
-#include "appframework/IAppSystem.h"
+#include "appframework/iappsystem.h"
 #include "datacache/imdlcache.h"
 #include "studio.h"
+#include "fasttimer.h"
 
 
 //-----------------------------------------------------------------------------

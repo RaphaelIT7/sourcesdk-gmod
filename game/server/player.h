@@ -249,11 +249,6 @@ public:
 	CBasePlayer();
 	~CBasePlayer();
 
-	void ExecuteStringCommand(char const*); // These propably belong to IClient. Validate!
-	bool ShouldSendMessages();
-	void OnRequestFullUpdate();
-
-
 	// IPlayerInfo passthrough (because we can't do multiple inheritance)
 	IPlayerInfo *GetPlayerInfo() { return &m_PlayerInfo; }
 	IBotController *GetBotController() { return &m_PlayerInfo; }
@@ -1557,10 +1552,6 @@ int CollectHumanPlayers( CUtlVector< T * > *playerVector, int team = TEAM_ANY, b
 
 	return playerVector->Count();
 }
-
-class CGMOD_Player : CBasePlayer {
-	// int m_iGModPlayerFlag
-};
 
 enum
 {

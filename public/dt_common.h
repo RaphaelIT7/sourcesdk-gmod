@@ -125,8 +125,7 @@ typedef enum
 	DPT_Int64,
 #endif
 
-	DPT_NUMSendPropTypes,
-	// DPT_GMOD_Player
+	DPT_NUMSendPropTypes
 
 } SendPropType;
 
