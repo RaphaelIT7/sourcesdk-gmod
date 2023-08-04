@@ -6,6 +6,9 @@ In the future, I'm going to make more projects that recreate gmod dlls.
 Currently, these dlls exist that can replace the given gmod dll:
 [datacache](https://github.com/RaphaelIT7/gmod-datacache)
 
+## Some facts about gmod
+- Gmod uses [rapidjson](https://github.com/Tencent/rapidjson) and [bootil](https://github.com/garrynewman/bootil). rapidjson is probably used for util.TableToJSON and util.JSONToTable
+
 ## my ToDo
 - [ ] Add Proper readme.
 - [ ] Fix PMELib.h and pme.cpp for Linux
