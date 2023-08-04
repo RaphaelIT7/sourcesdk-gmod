@@ -241,3 +241,10 @@ S_Write(bf_write *,CGMODVariant const&)
 V_Read(bf_read *,CGMODVariant &)  
 V_Write(bf_write *,CGMODVariant const&)  
 gmod_build_number(void)  
+
+- [ ] Document CServerGameDLL and CServerGameClients  
+CServerGameDLL::GMOD_OnAllSoundsStoppedSV(void)  
+CServerGameClients::GMOD_ClientConnected(int)  
+CServerGameClients::GMOD_SentClientStringTables(int)  
+CServerGameDLL::GMOD_ClientSignOnStateChanged(int,int,int)  
+CServerGameDLL::GMOD_CheckPassword(ulong long,char const*,char const*,char const*,char const*,char *,uint)  
