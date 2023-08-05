@@ -5076,11 +5076,9 @@ void GMOD_FinishLoading()
 
 			if Function exists {
 				LUA->PushString("LoadGModSave");
-				LUA->PushNil();
-				LUA->PushString(reason);
-				LUA->PushString(workshopid);
+				// ToDo: Add missing arguments. Is this even the right hook?
 
-				LUA->Call(4, 0);
+				LUA->Call(1, 0);
 
 				LUA->Pop(2);
 			} else {
