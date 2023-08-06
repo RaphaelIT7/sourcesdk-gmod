@@ -346,3 +346,5 @@ CLuaEffectManager::ReloadSpecific(char const*)
 CLuaEffectManager::~CLuaEffectManager()  
 
 - [ ] Add all other CLua*  
+- [ ] Add CGMOD_Player (Based off CHL2MP_Player)  
+- [ ] Add Push_* (like Push_Entity, Push_CTakeDamageInfo and so on)  
