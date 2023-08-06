@@ -348,3 +348,7 @@ CLuaEffectManager::~CLuaEffectManager()
 - [ ] Add all other CLua*  
 - [ ] Add CGMOD_Player (Based off CHL2MP_Player)  
 - [ ] Add Push_* (like Push_Entity, Push_CTakeDamageInfo and so on)  
+- [ ] Add GarrysMod::*  
+- [ ] Add GModDataPack::*  
+- [ ] Add ILuaInterface::UserGet<CBaseEntity>(int) Coulg get useful. __ZN13ILuaInterface7UserGetI11CBaseEntityEEPT_i  
+- [ ] Add all Lua::  
