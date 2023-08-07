@@ -58,7 +58,6 @@ public:
 	// Notify that the player is spawned
 	virtual void			ClientSpawned( edict_t *pPlayer ) OVERRIDE;
 
-	// ToDo: Test if these could belong to IServerGameClients.
 	virtual void			GMOD_ClientConnected(int);
 	virtual void 			GMOD_SentClientStringTables(int);
 	virtual void			GMOD_ReceiveClientMessage(int, edict_t*, bf_read*, int);
@@ -158,10 +157,9 @@ public:
 	// Called to see if the game server is okay with a manual changelevel or map command
 	virtual bool			IsManualMapChangeOkay( const char **pszReason ) OVERRIDE;
 
-	// ToDo: Test if these could belong to IServerGameClients.
 	virtual void 			GMOD_OnAllSoundsStoppedSV();
 	virtual void 			GMOD_ClientSignOnStateChanged( int, int, int );
-	virtual bool 			GMOD_CheckPassword( long long, char const*, char const*, char const*, char const*, char *,uint );
+	virtual bool 			GMOD_CheckPassword( long long, char const*, char const*, char const*, char const*, char *,uint ); // ip, steamiD64
 
 private:
 
@@ -171,6 +169,17 @@ private:
 	void LoadMessageOfTheDay();
 	void LoadSpecificMOTDMsg( const ConVar &convar, const char *pszStringName );
 };
+
+/*
+GMOD_OnAllSoundsStoppedSV()
+
+#include "game/shared/soundenvelope.h"
+
+void GMOD_OnAllSoundsStoppedSV()
+{
+	CSoundEnvelopeController->GetController()->SystemReset() // Should be the original function.
+}
+*/
 
 
 // Normally, when the engine calls ClientPutInServer, it calls a global function in the game DLL
