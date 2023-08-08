@@ -14,3 +14,5 @@ public:
 	void Shutdown();
 	void Startup();
 };
+
+extern CLuaManager* g_LuaManager;

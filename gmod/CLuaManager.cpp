@@ -1,9 +1,11 @@
 #include "CLuaManager.h"
 #include "CLuaNetworkedVars.h"
+#include "tier0/icommandline.h"
+#include "CLuaBase.h"
 
 CLuaManager::CLuaManager()
 {
-	// ToDo
+	g_LuaManager = this;
 }
 
 bool CLuaManager::CreateEntity(const char* class)
@@ -37,7 +39,7 @@ bool CLuaManager::ScriptExists(const char* folder, const char* path)
 	// ToDo
 }
 
-void CLuaManager::SendScriptsInFolder(const char* folder, const char* path)
+void CLuaManager::SendScriptsInFolder(const char* reload, const char* folder)
 {
 	// ToDo
 }
@@ -83,5 +85,21 @@ void CLuaManager::Startup()
 
 	// CLuaGamemode::LoadGamemode("base");
 
-	// again some weird !UNKNOW thing -> includes/dev_server_test.lua
+	RunScriptsInFolder("!RELOAD", "autorun");
+	SendScriptsInFolder("!RELOAD_CL", "matproxy");
+	SendScriptsInFolder("!RELOAD_CL", "postprocess");
+	SendScriptsInFolder("!RELOAD_CL", "vgui");
+	SendScriptsInFolder("", "skins"); // ???
+	SendScriptsInFolder("!RELOAD", "autorun");
+	SendScriptsInFolder("!RELOAD_CL", "autorun/client");
+	RunScriptsInFolder("!RELOAD_SV", "autorun/");
+	RunScriptsInFolder("!RELOAD_SV", "autorun/server/sensorbones");
+
+	if (CommandLine()->CheckParm("-systemtest"))
+	{
+		g_Lua->FindAndRunScript("includes/dev_server_test.lua", true, true, "!UNKNOWN", true); // Propably another function is used.
+		// spawn one bot
+	}
 }
+
+CLuaManager* g_LuaManager;
