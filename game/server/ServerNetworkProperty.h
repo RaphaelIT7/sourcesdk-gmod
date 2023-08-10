@@ -15,7 +15,6 @@
 #include "server_class.h"
 #include "edict.h"
 #include "timedeventmgr.h"
-#include "baseentity.h"
 
 //
 // Lightweight base class for networkable data on the server.
@@ -163,13 +162,6 @@ inline void CServerNetworkProperty::MarkPVSInformationDirty()
 		m_pPev->m_fStateFlags |= FL_EDICT_DIRTY_PVS_INFORMATION;
 	}
 }
-
-inline CServerNetworkProperty* CServerNetworkProperty::GetNetworkParent()
-{
-	CBaseEntity *pParent = m_hParent.Get();
-	return pParent ? pParent->NetworkProp() : NULL;
-}
-
 
 //-----------------------------------------------------------------------------
 // Sets/gets the network parent

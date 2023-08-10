@@ -21,6 +21,13 @@
 #include "shareddefs.h"
 #include "engine/ivmodelinfo.h"
 
+// ToDo: Move it back someday.
+inline CServerNetworkProperty* CServerNetworkProperty::GetNetworkParent()
+{
+	CBaseEntity *pParent = m_hParent.Get();
+	return pParent ? pParent->NetworkProp() : NULL;
+}
+
 class CDamageModifier;
 class CDmgAccumulator;
 
