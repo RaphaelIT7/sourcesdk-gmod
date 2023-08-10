@@ -21,10 +21,6 @@
 #include "basehandle.h"
 #include "entitylist_base.h"
 
-#ifndef CLIENT_DLL
-	#include "entitylist_def.h"
-#endif
-
 class IHandleEntity;
 
 
