@@ -20,9 +20,6 @@
 #include "const.h"
 #include "basehandle.h"
 #include "entitylist_base.h"
-#ifndef CLIENT
-	#include "entitylist.h"
-#endif
 
 
 class IHandleEntity;

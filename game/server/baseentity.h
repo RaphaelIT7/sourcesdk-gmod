@@ -2735,11 +2735,5 @@ void SendProxy_Origin( const SendProp *pProp, const void *pStruct, const void *p
 void SendProxy_OriginXY( const SendProp *pProp, const void *pStruct, const void *pData, DVariant *pOut, int iElement, int objectID );
 void SendProxy_OriginZ( const SendProp *pProp, const void *pStruct, const void *pData, DVariant *pOut, int iElement, int objectID );
 
-// ToDo: Move it back someday.
-inline CServerNetworkProperty* CServerNetworkProperty::GetNetworkParent()
-{
-	CBaseEntity *pParent = m_hParent.Get();
-	return pParent ? pParent->NetworkProp() : NULL;
-}
 
 #endif // BASEENTITY_H
