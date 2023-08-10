@@ -163,6 +163,12 @@ inline void CServerNetworkProperty::MarkPVSInformationDirty()
 	}
 }
 
+inline CServerNetworkProperty* CServerNetworkProperty::GetNetworkParent()
+{
+	CBaseEntity *pParent = m_hParent.Get();
+	return pParent ? pParent->NetworkProp() : NULL;
+}
+
 
 //-----------------------------------------------------------------------------
 // Sets/gets the network parent
