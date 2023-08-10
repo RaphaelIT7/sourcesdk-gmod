@@ -15,6 +15,7 @@
 #include "server_class.h"
 #include "edict.h"
 #include "timedeventmgr.h"
+#include "baseentity.h"
 
 //
 // Lightweight base class for networkable data on the server.
