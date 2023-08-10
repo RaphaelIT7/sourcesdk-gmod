@@ -13,7 +13,7 @@
 #pragma once
 #endif
 
-#include "baseentity.h"
+class CBaseEntity;
 
 class IEntityListener;
 
