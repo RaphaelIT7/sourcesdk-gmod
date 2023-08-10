@@ -14,7 +14,6 @@
 #include "tier0/vprof.h"
 #include "mapentities.h"
 #include "client.h"
-#include "ai_initutils.h"
 #include "globalstate.h"
 #include "datacache/imdlcache.h"
 
