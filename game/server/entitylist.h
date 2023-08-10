@@ -13,7 +13,7 @@
 #pragma once
 #endif
 
-class CBaseEntity;
+#include "baseentity.h"
 
 class IEntityListener;
 
@@ -251,10 +251,9 @@ inline bool FindEntityByName<CAI_BaseNPC>( const char *pszName, CAI_BaseNPC **pp
 //-----------------------------------------------------------------------------
 // Purpose: Simple object for storing a list of objects
 //-----------------------------------------------------------------------------
-typedef CHandle<CBaseEntity> EHANDLE2;
 struct entitem_t
 {
-	EHANDLE2 hEnt;
+	EHANDLE hEnt;
 	struct entitem_t *pNext;
 
 	// uses pool memory
