@@ -6,6 +6,7 @@ function IncludeSDKEngine()
 	local _project = project()
 
 	externalincludedirs(current_dir .. "/../engine")
+	externalincludedirs(current_dir .. "/../engine/audio/public")
 
 	filter("system:windows or macosx")
 		--links("engine")
