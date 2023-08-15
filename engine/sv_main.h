@@ -25,7 +25,7 @@ class CGameClient;
 // sv_main.c
 
 // Which areas are we going to transmit (usually 1, but with portals you can see into multiple other areas).
-//extern CUtlVector<int> g_AreasNetworked;
+extern CUtlVector<int> g_AreasNetworked;
 
 void SV_Frame( bool send_client_updates );
 void SV_FrameExecuteThreadDeferred();
@@ -112,7 +112,7 @@ given point.
 void SV_ResetPVS( byte* pvs, int pvssize );
 void SV_AddOriginToPVS( const Vector& origin );
 
-//extern CGlobalVars g_ServerGlobalVariables;
+extern CGlobalVars g_ServerGlobalVariables;
 
 void SV_FlushMemoryOnNextServer();
 

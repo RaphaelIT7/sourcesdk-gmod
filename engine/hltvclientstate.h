@@ -15,7 +15,7 @@
 class CClientFrame;
 class CHLTVServer;
 
-//extern ConVar tv_name;
+extern ConVar tv_name;
 
 class CHLTVClientState : public CBaseClientState
 {
