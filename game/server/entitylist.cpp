@@ -58,12 +58,12 @@ void CGlobalEntityList::OnAddEntity(IHandleEntity* pEnt, CBaseHandle handle)
 	}
 }
 
-static bool g_fInCleanupDelete;
+//static bool g_fInCleanupDelete;
 void CGlobalEntityList::OnRemoveEntity(IHandleEntity* pEnt, CBaseHandle handle)
 {
 #ifdef DBGFLAG_ASSERT
-	if (!g_fInCleanupDelete)
-	{
+	//if (!g_fInCleanupDelete)
+	//{
 		int i;
 		for (i = 0; i < g_DeleteList.Count(); i++)
 		{
@@ -74,7 +74,7 @@ void CGlobalEntityList::OnRemoveEntity(IHandleEntity* pEnt, CBaseHandle handle)
 				break;
 			}
 		}
-	}
+	//}
 #endif
 
 	CBaseEntity* pBaseEnt = static_cast<IServerUnknown*>(pEnt)->GetBaseEntity();
