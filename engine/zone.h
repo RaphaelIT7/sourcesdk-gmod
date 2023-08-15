@@ -5,8 +5,11 @@
 // $NoKeywords: $
 //=============================================================================//
 
+#ifndef server_pch
+	#define server_pch 0
+	#include "server_pch.h"
+#endif
 
-#include "server_pch.h"
 #include "client.h"
 #include "sv_packedentities.h"
 #include "bspfile.h"
