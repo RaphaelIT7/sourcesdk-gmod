@@ -1,6 +1,6 @@
 local current_dir = _SCRIPT_DIR
 
-function IncludeSDKEngine()
+function IncludeGmod()
 	IncludePackage("gmod")
 
 	local _project = project()
