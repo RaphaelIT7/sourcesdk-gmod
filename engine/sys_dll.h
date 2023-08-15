@@ -4,7 +4,11 @@
 //
 // $NoKeywords: $
 //=============================================================================//
-#include "server_pch.h"
+
+#ifndef server_pch_sys_dll
+	#define server_pch_sys_dll 0
+	#include "server_pch.h"
+#endif
 #include <utllinkedlist.h>
 
 #include "hltvserver.h"

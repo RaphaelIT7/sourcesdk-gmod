@@ -5,8 +5,8 @@
 // $NoKeywords: $
 //=============================================================================//
 
-#ifndef server_pch
-	#define server_pch 0
+#ifndef server_pch_zone
+	#define server_pch_zone 0
 	#include "server_pch.h"
 #endif
 
