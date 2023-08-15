@@ -56,7 +56,7 @@ public: // IClientMessageHandlers
 	PROCESS_CLC_MESSAGE( FileCRCCheck );
 	PROCESS_CLC_MESSAGE( FileMD5Check ) { return true; }
 	PROCESS_CLC_MESSAGE( SaveReplay );
-	PROCESS_CLC_MESSAGE( CLC_GMod_ClientToServer );
+	//PROCESS_CLC_MESSAGE( CLC_GMod_ClientToServer );
 
 public:
 	CClientFrame *GetDeltaFrame( int nTick );

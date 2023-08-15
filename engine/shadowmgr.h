@@ -2,147 +2,143 @@
 //
 // Purpose: 
 //
-// $Workfile:     $
-// $Date:         $
 // $NoKeywords: $
-//=============================================================================//
+//
+//===========================================================================//
 
-#ifndef IDISPINFO_H
-#define IDISPINFO_H
+#ifndef SHADOWMGR_H
+#define SHADOWMGR_H
 
 #ifdef _WIN32
 #pragma once
 #endif
 
-
-//=============================================================================
-
-#include <assert.h>
-#include "bspfile.h"
-#include "mathlib/vmatrix.h"
-#include "dispnode.h"
-#include "builddisp.h"
-#include "utlvector.h"
 #include "engine/ishadowmgr.h"
-#include "getintersectingsurfaces_struct.h"
+#include "mathlib/vmatrix.h"
 #include "surfacehandle.h"
-#include "ivrenderview.h"
+#include "mathlib/ssemath.h"
 
-struct model_t;
-struct Ray_t;
-struct RayDispOutput_t;
-struct decal_t;
-class CMeshBuilder;
+//-----------------------------------------------------------------------------
+// Forward declarations
+//-----------------------------------------------------------------------------
+class CDispInfo;
 
 
 //-----------------------------------------------------------------------------
-// Handle to decals + shadows on displacements
+// Shadow decals are applied to a single surface
 //-----------------------------------------------------------------------------
-typedef unsigned short DispDecalHandle_t;
+typedef unsigned short ShadowDecalHandle_t;
 
 enum
 {
-	DISP_DECAL_HANDLE_INVALID = (DispDecalHandle_t)~0
-};
-
-typedef unsigned short DispShadowHandle_t;
-
-enum
-{
-	DISP_SHADOW_HANDLE_INVALID = (DispShadowHandle_t)~0
+	SHADOW_DECAL_HANDLE_INVALID = (ShadowDecalHandle_t)~0
 };
 
 
 //-----------------------------------------------------------------------------
-// Displacement interface to the engine (and WorldCraft?)
+// This structure contains the vertex information for shadows
 //-----------------------------------------------------------------------------
-abstract_class IDispInfo
+struct ShadowVertex_t
+{
+	Vector	m_Position;
+	Vector	m_ShadowSpaceTexCoord;
+};
+
+
+//-----------------------------------------------------------------------------
+// This structure contains info to accelerate shadow darkness computation
+//-----------------------------------------------------------------------------
+struct ShadowDecalRenderInfo_t
+{
+	Vector2D m_vTexOrigin;
+	Vector2D m_vTexSize;
+	float m_flFalloffOffset;
+	float m_flOOZFalloffDist;
+	float m_flFalloffAmount;
+	float m_flFalloffBias;
+};
+
+
+//-----------------------------------------------------------------------------
+// Shadow-related functionality internal to the engine
+//-----------------------------------------------------------------------------
+abstract_class IShadowMgrInternal : public IShadowMgr
 {
 public:
+	virtual void LevelInit( int nSurfCount ) = 0;
+	virtual void LevelShutdown() = 0;
 
-	virtual				~IDispInfo() {}
+	// This surface has been rendered; and we'll want to render the shadows
+	// on this surface
+	virtual void AddShadowsOnSurfaceToRenderList( ShadowDecalHandle_t decalHandle ) = 0;
 
-	// Builds a list of displacement triangles intersecting the sphere.
-	virtual void		GetIntersectingSurfaces( GetIntersectingSurfaces_Struct *pStruct ) = 0;
+	// This will render all shadows that were previously added using
+	// AddShadowsOnSurfaceToRenderList. If there's a model to world transform
+	// for the shadow receiver, then send it in!
+	// NOTE: This draws both shadows and projected textures.
+	virtual void RenderProjectedTextures( VMatrix const* pModelToWorld = 0 ) = 0;
 
-	virtual void		RenderWireframeInLightmapPage( int pageId ) = 0;
-	
-	virtual void		GetBoundingBox( Vector &bbMin, Vector &bbMax ) = 0;
+	// NOTE: This draws shadows
+	virtual void RenderShadows( VMatrix const* pModelToWorld = 0 ) = 0;
 
-	// Get and set the parent surfaces.
-	virtual void		SetParent( SurfaceHandle_t surfID ) = 0;
-	virtual SurfaceHandle_t	GetParent() = 0;
+	// NOTE: This draws flashlights
+	virtual void RenderFlashlights( bool bDoMasking, VMatrix const* pModelToWorld = 0 ) = 0;
 
-	// Add dynamic lights to the lightmap for this surface.
-	virtual void AddDynamicLights( struct dlight_t *pLights, unsigned int lightMask ) = 0;
-	// Compute the mask for the lights hitting this surface.
-	virtual unsigned int ComputeDynamicLightMask( struct dlight_t *pLights ) = 0;
+	// Clears the list of shadows to render 
+	virtual void ClearShadowRenderList() = 0;
 
-	// Add and remove decals.
-	// flSize is like the radius of the decal so the decal isn't put on any disp faces it's too far away from.
-	virtual DispDecalHandle_t	NotifyAddDecal( decal_t *pDecal, float flSize ) = 0;
-	virtual void				NotifyRemoveDecal( DispDecalHandle_t h ) = 0;
-	
-	virtual DispShadowHandle_t	AddShadowDecal( ShadowHandle_t shadowHandle ) = 0;
-	virtual void				RemoveShadowDecal( DispShadowHandle_t handle ) = 0;
+	// Projects + clips shadows
+	// count + ppPosition describe an array of pointers to vertex positions
+	// of the unclipped shadow
+	// ppOutVertex is pointed to the head of an array of pointers to
+	// clipped vertices the function returns the number of clipped vertices
+	virtual int ProjectAndClipVertices( ShadowHandle_t handle, int count, 
+		Vector** ppPosition, ShadowVertex_t*** ppOutVertex ) = 0;
 
-	// Compute shadow fragments for a particular shadow, return the vertex + index count of all fragments
-	virtual bool		ComputeShadowFragments( DispShadowHandle_t h, int& vertexCount, int& indexCount ) = 0;
+	// Computes information for rendering
+	virtual void ComputeRenderInfo( ShadowDecalRenderInfo_t* pInfo, ShadowHandle_t handle ) const = 0;
 
-	// Tag the surface and check if it's tagged. You can untag all the surfaces
-	// with DispInfo_ClearAllTags. Note: it just uses a frame counter to track the
-	// tag state so it's really really fast to call ClearAllTags (just increments
-	// a variable 99.999% of the time).
-	virtual bool		GetTag() = 0;
-	virtual void		SetTag() = 0;
+	// Shadow state...
+	virtual unsigned short InvalidShadowIndex( ) = 0;
+	virtual void SetModelShadowState( ModelInstanceHandle_t instance ) = 0;
 
-	// Cast a ray against this surface
-	virtual	bool	TestRay( Ray_t const& ray, float start, float end, float& dist, Vector2D* lightmapUV, Vector2D* textureUV ) = 0;
+	virtual void SetNumWorldMaterialBuckets( int numMaterialSortBins ) = 0;
 
-	// Computes the texture + lightmap coordinate given a displacement uv
-	virtual void	ComputeLightmapAndTextureCoordinate( RayDispOutput_t const& uv, Vector2D* luv, Vector2D* tuv ) = 0;
+	virtual void DrawFlashlightDecals( int sortGroup, bool bDoMasking ) = 0;
+
+	virtual void DrawFlashlightDecalsOnSingleSurface( SurfaceHandle_t surfID, bool bDoMasking ) = 0;
+
+	virtual void DrawFlashlightOverlays( int nSortGroup, bool bDoMasking ) = 0;
+
+	virtual void DrawFlashlightDepthTexture( ) = 0;
+
+	virtual void DrawFlashlightDecalsOnDisplacements( int sortGroup, CDispInfo **visibleDisps, int nVisibleDisps, bool bDoMasking ) = 0;
+
+	virtual void SetFlashlightStencilMasks( bool bDoMasking ) = 0;
+	virtual bool ModelHasShadows( ModelInstanceHandle_t instance ) = 0;
+
+	// Converts z value to darkness
+	inline unsigned char ComputeDarkness( float z, const ShadowDecalRenderInfo_t& info ) const;
 };
 
 
-// ----------------------------------------------------------------------------- //
-// Adds shadow rendering data to a particular mesh builder
-// The function will return the new base index
-// ----------------------------------------------------------------------------- //
-int				DispInfo_AddShadowsToMeshBuilder( CMeshBuilder& meshBuilder, 
-										DispShadowHandle_t h, int baseIndex );
+//-----------------------------------------------------------------------------
+// inline methods
+//-----------------------------------------------------------------------------
+inline unsigned char IShadowMgrInternal::ComputeDarkness( float z, const ShadowDecalRenderInfo_t& info ) const
+{
+	// NOTE: 0 means black, non-zero adds towards white...
+	z = ( z - info.m_flFalloffOffset ) * info.m_flOOZFalloffDist;
+	z = fsel( z, z, 0.0f );
+	z = info.m_flFalloffBias + z * info.m_flFalloffAmount;
+	z = fsel( z - 255.0f, 255.0f, z );
+	return z;
+}
 
 
-typedef void* HDISPINFOARRAY;
+//-----------------------------------------------------------------------------
+// Singleton
+//-----------------------------------------------------------------------------
+extern IShadowMgrInternal* g_pShadowMgr;
 
-
-// Init and shutdown for the material system (references global, materials).
-void			DispInfo_InitMaterialSystem();
-void			DispInfo_ShutdownMaterialSystem();
-
-
-// Use these to manage a list of IDispInfos.
-HDISPINFOARRAY	DispInfo_CreateArray( int nElements );
-void			DispInfo_DeleteArray( HDISPINFOARRAY hArray );
-IDispInfo*		DispInfo_IndexArray( HDISPINFOARRAY hArray, int iElement );
-int				DispInfo_ComputeIndex( HDISPINFOARRAY hArray, IDispInfo* pInfo );
-
-// Clear the tags for all displacements in the array.
-void			DispInfo_ClearAllTags( HDISPINFOARRAY hArray );
-
-// Call this to render a list of displacements.
-// If bOrtho is true, then no backface removal is done on dispinfos.
-void			DispInfo_RenderList( int nSortGroup, SurfaceHandle_t *pList, int listCount, bool bOrtho, unsigned long flags, ERenderDepthMode DepthMode );
-
-
-// This should be called from Map_LoadDisplacements (while the map file is open).
-// It loads the displacement data from the file and prepares the displacements for rendering.
-//
-// bRestoring is set to true when just restoring the data from the mapfile
-// (ie: displacements already are initialized but need new static buffers).
-bool			DispInfo_LoadDisplacements( model_t *pWorld, bool bRestoring );
-
-// Deletes all the static vertex buffers.
-void			DispInfo_ReleaseMaterialSystemObjects( model_t *pWorld );
-
-
-#endif // IDISPINFO_H
+#endif

@@ -257,6 +257,6 @@ public:
 	int				m_nSkipToTick;	// skip to tick ASAP, -1 = off
 };
 
-//extern CHLTVServer *hltv;	// The global HLTV server/object. NULL on xbox.
+extern CHLTVServer *hltv;	// The global HLTV server/object. NULL on xbox.
 
 #endif // HLTVSERVER_H

@@ -130,7 +130,7 @@ public: // IServerMessageHandlers
 	PROCESS_SVC_MESSAGE( TempEntities );
 	PROCESS_SVC_MESSAGE( Prefetch );
 	PROCESS_SVC_MESSAGE( SetPauseTimed );
-	PROCESS_SVC_MESSAGE( SVC_GMod_ServerToClient );
+	//PROCESS_SVC_MESSAGE( SVC_GMod_ServerToClient );
 
 public:
 
