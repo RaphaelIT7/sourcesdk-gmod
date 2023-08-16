@@ -17,7 +17,7 @@ class CHLTVServer;
 
 extern ConVar tv_name;
 
-abstract class CHLTVClientState : public CBaseClientState
+class CHLTVClientState : public CBaseClientState
 {
 
 friend class CHLTVServer;
@@ -72,6 +72,7 @@ public: // IServerMessageHandlers
 	PROCESS_SVC_MESSAGE( Prefetch );
 	PROCESS_SVC_MESSAGE( GameEventList );
 	PROCESS_SVC_MESSAGE( Menu );
+	PROCESS_SVC_MESSAGE( SVC_GMod_ServerToClient );
 
 public:
 	void SendPacket();
