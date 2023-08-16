@@ -216,7 +216,7 @@ private:
 public:
 
 	CGameClient		*m_MasterClient;		// if != NULL, this is the master HLTV 
-	CHLTVClientState m_ClientState;
+	//CHLTVClientState m_ClientState;
 	CHLTVDemoRecorder m_DemoRecorder;			// HLTV demo object for recording and playback
 	CGameServer		*m_Server;		// pointer to source server (sv.)
 	IHLTVDirector	*m_Director;	// HTLV director exported by game.dll	

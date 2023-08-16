@@ -471,7 +471,7 @@ CHLTVServer::CHLTVServer()
 	m_flPlaybackRateModifier = 0;
 	m_nSkipToTick = 0;
 	m_bMasterOnlyMode = false;
-	m_ClientState.m_pHLTV = this;
+	//m_ClientState.m_pHLTV = this;
 	m_nGlobalSlots = 0;
 	m_nGlobalClients = 0;
 	m_nGlobalProxies = 0;
@@ -717,7 +717,7 @@ bool CHLTVServer::DispatchToRelay( CHLTVClient *pClient )
 
 void CHLTVServer::ConnectRelay(const char *address)
 {
-	if ( m_ClientState.IsConnected() )
+	/*if ( m_ClientState.IsConnected() )
 	{
 		// do not try to reconnect to old connection
 		m_ClientState.m_szRetryAddress[0] = 0;
@@ -729,12 +729,12 @@ void CHLTVServer::ConnectRelay(const char *address)
 	}
 
 	// connect to new server
-	m_ClientState.Connect( address, "tvrelay" );
+	m_ClientState.Connect( address, "tvrelay" );*/
 }
 
 void CHLTVServer::StartRelay()
 {
-	if ( !m_ClientState.IsConnected() && !IsPlayingBack() )
+	/*if ( !m_ClientState.IsConnected() && !IsPlayingBack() )
 	{
 		DevMsg("StartRelay: not connected.\n");
 		Shutdown();
@@ -761,7 +761,7 @@ void CHLTVServer::StartRelay()
 
 	m_State = ss_loading;
 
-	m_nSpawnCount++;
+	m_nSpawnCount++;*/
 }
 
 int	CHLTVServer::GetHLTVSlot( void )
@@ -819,7 +819,7 @@ void CHLTVServer::GetGlobalStats( int &proxies, int &slots, int &clients )
 
 const netadr_t *CHLTVServer::GetRelayAddress( void )
 {
-	if ( IsMasterProxy() )
+	/*if ( IsMasterProxy() )
 	{
 		return &net_local_adr; // TODO wrong port
 	}
@@ -830,7 +830,7 @@ const netadr_t *CHLTVServer::GetRelayAddress( void )
 	else
 	{
 		return NULL;
-	}
+	}*/
 }
 
 bool CHLTVServer::IsMasterProxy( void )
@@ -1402,7 +1402,7 @@ void CHLTVServer::SendClientMessages ( bool bSendSnapshots )
 
 void CHLTVServer::UpdateStats( void )
 {
-	if ( m_fNextSendUpdateTime > net_time )
+	/*if ( m_fNextSendUpdateTime > net_time )
 		return;
 
 	m_fNextSendUpdateTime = net_time + 8.0f;
@@ -1458,7 +1458,7 @@ void CHLTVServer::UpdateStats( void )
 	{
 		// as a relay proxy just broadcast event
 		BroadcastEvent( event );
-	}
+	}*/
 
 }
 
@@ -1534,7 +1534,7 @@ CClientFrame *CHLTVServer::GetDeltaFrame( int nTick )
 
 void CHLTVServer::RunFrame()
 {
-	VPROF_BUDGET( "CHLTVServer::RunFrame", "HLTV" );
+	/*VPROF_BUDGET( "CHLTVServer::RunFrame", "HLTV" );
 
 	// update network time etc
 	NET_RunFrame( Plat_FloatTime() );
@@ -1576,7 +1576,7 @@ void CHLTVServer::RunFrame()
 	if ( !sv.IsActive() )
 		Steam3Server().RunFrame();
 	
-	UpdateMasterServer();
+	UpdateMasterServer();*/
 }
 
 void CHLTVServer::UpdateTick( void )
@@ -1659,7 +1659,7 @@ void CHLTVServer::Clear( void )
 
 	m_Director = NULL;
 	m_MasterClient = NULL;
-	m_ClientState.Clear();
+	//m_ClientState.Clear();
 	m_Server = NULL;
 	m_nFirstTick = -1;
 	m_nLastTick = 0;
@@ -1740,11 +1740,11 @@ void CHLTVServer::GetNetStats( float &avgIn, float &avgOut )
 {
 	CBaseServer::GetNetStats( avgIn, avgOut	);
 
-	if ( m_ClientState.IsActive() )
+	/*if ( m_ClientState.IsActive() )
 	{
 		avgIn += m_ClientState.m_NetChannel->GetAvgData(FLOW_INCOMING);
 		avgOut += m_ClientState.m_NetChannel->GetAvgData(FLOW_OUTGOING);
-	}
+	}*/
 }
 
 void CHLTVServer::Shutdown( void )
@@ -1762,9 +1762,9 @@ void CHLTVServer::Shutdown( void )
 	else
 	{
 		// do not try to reconnect to old connection
-		m_ClientState.m_szRetryAddress[0] = 0;
+		//m_ClientState.m_szRetryAddress[0] = 0;
 
-		m_ClientState.Disconnect( "HLTV server shutting down", true );
+		//m_ClientState.Disconnect( "HLTV server shutting down", true );
 	}
 
 	g_GameEventManager.RemoveListener( this );
@@ -1841,16 +1841,16 @@ bool CHLTVServer::StartPlayback( const char *filename, bool bAsTimeDemo )
 	}
 	
 	// create a fake channel with a NULL address
-	m_ClientState.m_NetChannel = NET_CreateNetChannel( NS_CLIENT, NULL, "DEMO", &m_ClientState );
+	//m_ClientState.m_NetChannel = NET_CreateNetChannel( NS_CLIENT, NULL, "DEMO", &m_ClientState );
 
-	if ( !m_ClientState.m_NetChannel )
+	/*if ( !m_ClientState.m_NetChannel )
 	{
 		ConMsg( "CDemo::Play: failed to create demo net channel\n" );
 		m_DemoFile.Close();
 		return false;
-	}
+	}*/
 	
-	m_ClientState.m_NetChannel->SetTimeout( -1.0f );	// never timeout
+	//m_ClientState.m_NetChannel->SetTimeout( -1.0f );	// never timeout
 
 
 	// Now read in the directory structure.
@@ -1867,8 +1867,8 @@ bool CHLTVServer::StartPlayback( const char *filename, bool bAsTimeDemo )
 
 	ConMsg( "Reading time :%.4f\n", diff );
 
-	NET_RemoveNetChannel( m_ClientState.m_NetChannel, true );
-	m_ClientState.m_NetChannel = NULL;
+	//NET_RemoveNetChannel( m_ClientState.m_NetChannel, true );
+	//m_ClientState.m_NetChannel = NULL;
 
 	return true;
 }
@@ -1900,7 +1900,7 @@ void CHLTVServer::ReadCompleteDemoFile()
 		case dem_consolecmd:
 			{
 				NET_StringCmd cmdmsg( m_DemoFile.ReadConsoleCommand() );
-				m_ClientState.ProcessStringCmd( &cmdmsg );
+				//m_ClientState.ProcessStringCmd( &cmdmsg );
 			}
 			break;
 		case dem_datatables:
@@ -1974,7 +1974,7 @@ void CHLTVServer::ReadCompleteDemoFile()
 					demoPacket.size = length;
 					demoPacket.message.StartReading( buffer,  length );
 
-					m_ClientState.m_NetChannel->ProcessPacket( &demoPacket, false );
+					//m_ClientState.m_NetChannel->ProcessPacket( &demoPacket, false );
 				}
 			}
 	
@@ -2275,14 +2275,14 @@ CON_COMMAND( tv_retry, "Reconnects the SourceTV relay proxy." )
 		return;
 	}
 
-	if ( !hltv->m_ClientState.m_szRetryAddress[ 0 ] )
+	/*if ( !hltv->m_ClientState.m_szRetryAddress[ 0 ] )
 	{
 		ConMsg( "Can't retry, no previous SourceTV connection\n" );
 		return;
 	}
 
 	ConMsg( "Commencing SourceTV connection retry to %s\n", hltv->m_ClientState.m_szRetryAddress );
-	Cbuf_AddText( va( "tv_relay %s\n", hltv->m_ClientState.m_szRetryAddress ) );
+	Cbuf_AddText( va( "tv_relay %s\n", hltv->m_ClientState.m_szRetryAddress ) );*/
 }
 
 CON_COMMAND( tv_record, "Starts SourceTV demo recording." )
@@ -2417,7 +2417,7 @@ void EditDemo_f( const CCommand &args )
 
 	Q_DefaultExtension( name, ".dem", sizeof( name ) );
 
-	hltv->m_ClientState.m_bSaveMemory = true;
+	//hltv->m_ClientState.m_bSaveMemory = true;
 
 	demoplayer->StartPlayback( name, false );
 }
