@@ -72,7 +72,7 @@ public: // IServerMessageHandlers
 	PROCESS_SVC_MESSAGE( Prefetch );
 	PROCESS_SVC_MESSAGE( GameEventList );
 	PROCESS_SVC_MESSAGE( Menu );
-	PROCESS_SVC_MESSAGE( SVC_GMod_ServerToClient );
+	PROCESS_SVC_MESSAGE( GMod_ServerToClient );
 
 public:
 	void SendPacket();
