@@ -2765,8 +2765,8 @@ bool SV_IsSimulating( void )
 			return false;
 
 		// Don't simulate in single player if console is down or the bug UI is active and we're in a game 
-		if ( cl.IsActive() && ( Con_IsVisible() || EngineVGui()->ShouldPause() ) )
-			return false;
+		//if ( cl.IsActive() && ( Con_IsVisible() || EngineVGui()->ShouldPause() ) )
+		//	return false;
 	}
 #endif //SWDS
 	
