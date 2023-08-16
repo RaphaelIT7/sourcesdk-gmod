@@ -56,6 +56,7 @@
 #include "sv_ipratelimit.h"
 #include "cl_steamauth.h"
 #include "sv_filter.h"
+#include "threadtools.h"
 
 #if defined( _X360 )
 #include "xbox/xbox_win32stubs.h"
@@ -2135,7 +2136,7 @@ void CBaseServer::Shutdown( void )
 	}
 
 	// Let drop messages go out
-	Sys_Sleep( 100 );
+	ThreadSleep(100)
 
 	// clear everything
 	Clear();
