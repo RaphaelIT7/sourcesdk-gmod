@@ -166,17 +166,17 @@ static void SV_Pure_f( const CCommand &args )
     {
         // If we're a client on a server with sv_pure = 1, display the current whitelist.
 #ifndef DEDICATED
-        if ( cl.IsConnected() )
+        //if ( cl.IsConnected() )
         {
             Msg( "\n\n" );
             extern void CL_PrintWhitelistInfo(); // from cl_main.cpp
             CL_PrintWhitelistInfo();
-        }
-        else
+        }*/
+        //else
 #endif
-        {
+       // {
             Msg( "\nCurrent sv_pure value is %d.\n", GetSvPureMode() );
-        }
+        //}
     }
 	if ( sv.IsActive() && g_sv_pure_waiting_on_reload )
 	{
@@ -2839,7 +2839,7 @@ void SV_Think( bool bIsSimulating )
 	g_ServerGlobalVariables.frametime	= bIsSimulating ? host_state.interval_per_tick : 0;
 
 	// in singleplayer only run think/simulation if localplayer is connected
-	bIsSimulating =  bIsSimulating && ( sv.IsMultiplayer() || cl.IsActive() );
+	bIsSimulating =  bIsSimulating && ( sv.IsMultiplayer() /*|| cl.IsActive()*/ );
 
 	g_pServerPluginHandler->GameFrame( bIsSimulating );
 }
