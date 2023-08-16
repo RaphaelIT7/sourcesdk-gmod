@@ -17,7 +17,7 @@ class CHLTVServer;
 
 extern ConVar tv_name;
 
-class CHLTVClientState : public CBaseClientState
+abstract class CHLTVClientState : public CBaseClientState
 {
 
 friend class CHLTVServer;
