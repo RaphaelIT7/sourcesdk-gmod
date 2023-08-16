@@ -352,7 +352,7 @@ void CGameClient::DownloadCustomizations()
 
 		// we don't have it, request download from client
 
-		m_nCustomFiles[i].reqID = m_NetChannel->RequestFile( hexname.m_Filename );
+		//m_nCustomFiles[i].reqID = m_NetChannel->RequestFile( hexname.m_Filename );
 	}
 }
 
