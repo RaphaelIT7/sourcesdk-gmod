@@ -166,7 +166,7 @@ static void SV_Pure_f( const CCommand &args )
     {
         // If we're a client on a server with sv_pure = 1, display the current whitelist.
 #ifndef DEDICATED
-        //if ( cl.IsConnected() )
+        /*if ( cl.IsConnected() )
         {
             Msg( "\n\n" );
             extern void CL_PrintWhitelistInfo(); // from cl_main.cpp
