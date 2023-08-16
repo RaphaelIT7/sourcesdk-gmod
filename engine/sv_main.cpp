@@ -1355,7 +1355,7 @@ static ConCommand sv_netspike( "sv_netspike", sv_netspike_f, szSvNetSpikeUsageTe
 
 CBaseClient *CGameServer::CreateNewClient(int slot )
 {
-	CBaseClient *pClient = new CGameClient( slot, this );
+	CBaseClient *pClient = NULL; /new CGameClient( slot, this );
 	return pClient;
 }
 
@@ -2443,8 +2443,8 @@ bool CGameServer::SpawnServer( const char *szMapName, const char *szMapFile, con
 	}
 
 	current_skill = (int)(skill.GetFloat() + 0.5);
-	current_skill = max( current_skill, 0 );
-	current_skill = min( current_skill, 3 );
+	current_skill = MAX( current_skill, 0 );
+	current_skill = MIN( current_skill, 3 );
 
 	skill.SetValue( (float)current_skill );
 
