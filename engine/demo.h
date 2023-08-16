@@ -82,7 +82,7 @@ public:
 	virtual bool	IsLoading( void ) = 0; // true if demo is currently loading
 };
 
-//extern IDemoPlayer *demoplayer;	// reference to current demo player
-//extern IDemoRecorder *demorecorder; // reference to current demo recorder
+extern IDemoPlayer *demoplayer;	// reference to current demo player
+extern IDemoRecorder *demorecorder; // reference to current demo recorder
 
 #endif // DEMO_H

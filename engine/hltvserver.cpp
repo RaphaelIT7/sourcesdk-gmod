@@ -133,7 +133,7 @@ void CDeltaEntityCache::SetTick( int nTick, int nMaxEntities )
 	if ( m_nCacheSize <= 0 )
 		return;
 
-	m_nMaxEntities = min(nMaxEntities,MAX_EDICTS);
+	m_nMaxEntities = MIN(nMaxEntities,MAX_EDICTS);
 	m_nTick = nTick;
 }
 
