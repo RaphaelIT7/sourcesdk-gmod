@@ -1355,7 +1355,7 @@ static ConCommand sv_netspike( "sv_netspike", sv_netspike_f, szSvNetSpikeUsageTe
 
 CBaseClient *CGameServer::CreateNewClient(int slot )
 {
-	CBaseClient *pClient = NULL; /new CGameClient( slot, this );
+	CBaseClient *pClient = NULL; //new CGameClient( slot, this );
 	return pClient;
 }
 
