@@ -37,14 +37,14 @@ CreateInterfaceFn ClientDLL_GetFactory( void );
 void DebugDrawPhysCollide( const CPhysCollide *pCollide, IMaterial *pMaterial, matrix3x4_t& transform, const color32 &color, bool drawAxes );
 
 #ifndef SWDS
-//extern IBaseClientDLL *g_ClientDLL;
+extern IBaseClientDLL *g_ClientDLL;
 #endif
 
-//extern IVModelRender* modelrender;
-//extern IClientLeafSystemEngine* clientleafsystem;
-//extern bool g_bClientLeafSystemV1;
-//extern ClientClass *g_pClientClasses;
-//extern bool scr_drawloading;
-//extern IClientReplay *g_pClientReplay;
+extern IVModelRender* modelrender;
+extern IClientLeafSystemEngine* clientleafsystem;
+extern bool g_bClientLeafSystemV1;
+extern ClientClass *g_pClientClasses;
+extern bool scr_drawloading;
+extern IClientReplay *g_pClientReplay;
 
 #endif // CDLL_ENGINE_INT_H
