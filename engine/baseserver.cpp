@@ -2136,7 +2136,7 @@ void CBaseServer::Shutdown( void )
 	}
 
 	// Let drop messages go out
-	ThreadSleep(100)
+	ThreadSleep(100);
 
 	// clear everything
 	Clear();
