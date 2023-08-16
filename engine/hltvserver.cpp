@@ -596,7 +596,7 @@ void CHLTVServer::StartMaster(CGameClient *client)
 	if ( m_bMasterOnlyMode )
 	{
 		// we allow only one client in master only mode
-		tv_maxclients.SetValue( min(1,tv_maxclients.GetInt()) );
+		tv_maxclients.SetValue( MIN(1,tv_maxclients.GetInt()) );
 	}
 
 	SetMaxClients( tv_maxclients.GetInt() );
@@ -681,7 +681,7 @@ bool CHLTVServer::DispatchToRelay( CHLTVClient *pClient )
 		// ratio = clients/slots. give relay proxies 25% bonus
 		float myRatio = ((float)GetNumClients()/(float)GetMaxClients()) * 1.25f;
 
-		myRatio = min( myRatio, 1.0f ); // clamp to 1
+		myRatio = MIN( myRatio, 1.0f ); // clamp to 1
 
 		// if we have a better local ratio then other proxies, keep this client here
 		if ( myRatio < fBestRatio )
@@ -771,7 +771,7 @@ int	CHLTVServer::GetHLTVSlot( void )
 
 float CHLTVServer::GetOnlineTime( void )
 {
-	return max(0., net_time - m_flStartTime);
+	return MAX(0., net_time - m_flStartTime);
 }
 
 void CHLTVServer::GetLocalStats( int &proxies, int &slots, int &clients )
@@ -1024,7 +1024,7 @@ bool CHLTVServer::ShouldUpdateMasterServer()
 
 CBaseClient *CHLTVServer::CreateNewClient(int slot )
 {
-	return new CHLTVClient( slot, this );
+	return NULL; //new CHLTVClient( slot, this );
 }
 
 void CHLTVServer::InstallStringTables( void )
@@ -1596,7 +1596,7 @@ void CHLTVServer::UpdateTick( void )
 	if ( IsMasterProxy() )
 	{
 		// get tick from director, he decides delay etc
-		nNewTick = max( m_nFirstTick, m_Director->GetDirectorTick() );
+		nNewTick = MAX( m_nFirstTick, m_Director->GetDirectorTick() );
 	}
 
 	// the the closest available frame
