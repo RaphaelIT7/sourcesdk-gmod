@@ -224,7 +224,7 @@ public:
 		for ( i = 0; i < nEntities; i++ )
 		{
 			pTable = GetEntityInfo( i );
-			m_EntityToIndex.Insert(  CHashElement( pTable->hEnt.Get(), i ) );
+			//m_EntityToIndex.Insert(  CHashElement( pTable->hEnt.Get(), i ) );
 		}
 #endif
 	}

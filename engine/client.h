@@ -271,7 +271,7 @@ private:
 	bool		m_bMarkedCRCsUnverified;
 };  //CClientState
 
-extern	CClientState	cl;
+//extern	CClientState	cl;
 
 #ifndef SWDS
 extern CGlobalVarsBase g_ClientGlobalVariables;

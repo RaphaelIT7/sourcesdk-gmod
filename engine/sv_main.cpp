@@ -695,7 +695,7 @@ void SetupMaxPlayers( int iDesiredMaxPlayers )
 	if ( newmaxplayers >= 1 )
 	{
 		// Never go above what the game .dll can handle
-		newmaxplayers	= min( newmaxplayers, maxmaxplayers );
+		newmaxplayers	= MIN( newmaxplayers, maxmaxplayers );
 		sv.m_nMaxClientsLimit	= newmaxplayers;
 	}
 	else
