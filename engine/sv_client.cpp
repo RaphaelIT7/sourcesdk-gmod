@@ -433,7 +433,7 @@ void CGameClient::SetupPackInfo( CFrameSnapshot *pSnapshot )
 	if ( sv_maxreplay.GetFloat() > 0 )
 	{
 		// if the server has replay features enabled, allow a way bigger frame buffer
-		nMaxFrames = max ( (float)nMaxFrames, sv_maxreplay.GetFloat() / m_Server->GetTickInterval() );
+		nMaxFrames = MAX ( (float)nMaxFrames, sv_maxreplay.GetFloat() / m_Server->GetTickInterval() );
 	}
 		
 	if ( nMaxFrames < AddClientFrame( m_pCurrentFrame ) )
