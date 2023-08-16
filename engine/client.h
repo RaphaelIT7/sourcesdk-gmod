@@ -53,7 +53,7 @@ struct AddAngle
 // Purpose: CClientState should hold all pieces of the client state
 //   The client_state_t structure is wiped completely at every server signon
 //-----------------------------------------------------------------------------
-class CClientState : public CBaseClientState, public CClientFrameManager
+abstract class CClientState : public CBaseClientState, public CClientFrameManager
 {
 	typedef struct CustomFile_s
 	{
