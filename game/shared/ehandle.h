@@ -21,7 +21,6 @@
 #include "basehandle.h"
 #include "entitylist_base.h"
 
-
 class IHandleEntity;
 
 

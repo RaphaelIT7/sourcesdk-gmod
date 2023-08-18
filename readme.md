@@ -6,6 +6,9 @@ In the future, I'm going to make more projects that recreate gmod dlls.
 Currently, these dlls exist that can replace the given gmod dll:
 [datacache](https://github.com/RaphaelIT7/gmod-datacache)
 
+## Some facts about gmod
+- Gmod uses [rapidjson](https://github.com/Tencent/rapidjson) and [bootil](https://github.com/garrynewman/bootil). rapidjson is probably used for util.TableToJSON and util.JSONToTable
+
 ## my ToDo
 - [ ] Add Proper readme.
 - [ ] Fix PMELib.h and pme.cpp for Linux
@@ -202,7 +205,8 @@ CGMODDataTable::Skip(bf_read *)
 CGMODDataTable::WriteProps(bf_read *,bf_write *,int)  
 CGMODDataTable::~CGMODDataTable()  
 CGMODVariant::~CGMODVariant()  
-- [ ] Add CModelRender || CModelRender::GMODAddDecal(ushort,Vector const&,Vector const&,IMaterial *,int,float,float)  
+- [ ] Add CModelRender  
+CModelRender::GMODAddDecal(ushort,Vector const&,Vector const&,IMaterial *,int,float,float)  
 - [ ] Find out where these belong to  
 E_Compare(bf_read *,bf_read *)  
 E_Read(bf_read *,CGMODVariant &)  
@@ -223,9 +227,7 @@ GMODTable_IsEncodedZero(SendProp const*,bf_read *)
 GMODTable_IsZero(uchar const*,DVariant *,SendProp const*)  
 GMODTable_SkipProp(SendProp const*,bf_read *)  
 GMODVariant_Skip(bf_read *)  
-GMOD_FinishLoading(void)  
 GMOD_GetTableDataSize(CNetworkStringTable *)  
-GMOD_SendError(std::string,std::string)  
 I_Compare(bf_read *,bf_read *)  
 I_Read(bf_read *,CGMODVariant &)  
 I_Skip(bf_read *)  
@@ -238,3 +240,115 @@ S_Write(bf_write *,CGMODVariant const&)
 V_Read(bf_read *,CGMODVariant &)  
 V_Write(bf_write *,CGMODVariant const&)  
 gmod_build_number(void)  
+GetAddonFromError(CLuaError *,IAddonSystem::Information *,bool *)  
+- [ ] Document CGarrysMod  
+CCallback<CGarrysMod, P2PSessionConnectFail_t, true>::Run(void *)  
+CCallback<CGarrysMod, P2PSessionRequest_t, true>::Run(void *)  
+GarrysMod::CGarrysMod(void)  
+CGarrysMod::EndVideoScale(int, int)  
+CGarrysMod::EntityRemoved(CBaseEntity *) NOTE: This looks interesting. Maybe try to rebuild the code.  
+CGarrysMod::FireGameEvent(IGameEvent *)  
+CGarrysMod::GetGameDescription(void)  
+CGarrysMod::GetMapName(void)  
+CGarrysMod::InitializeMod(void * (*)(char const*, int *))  
+CGarrysMod::LevelInit(char const*, char const*, char const*, char const*, bool, bool)  
+CGarrysMod::MD5String(char *, char const*, char const*, char const*)  
+CGarrysMod::MenuThink(void)  
+CGarrysMod::OnP2PSessionRequest(P2PSessionRequest_t *)  
+CGarrysMod::OnP2PSessionConnectFail(P2PSessionConnectFail_t *)  
+CGarrysMod::PlaySound(char const*)  
+CGarrysMod::PostInitialize(void)  
+CGarrysMod::RunConsoleCommand(char const*)  
+CGarrysMod::ShouldCollide(CBaseEntity *, CBaseEntity *)  
+CGarrysMod::Shutdown(void)  
+CGarrysMod::StartVideoScale(int, int)  
+CGarrysMod::Think(void)  
+
+GarrysMod::AutoRefresh::Init(void)  
+- [ ] Find out for what map.pack is used.  
+- [ ] Add CLuaClass  
+CLuaClass::Add(CLuaClassFunction *)  
+CLuaClass::CLuaClass(char const*, int, void (*)(void), char const*)  
+CLuaClass::Get(int)  
+CLuaClass::InitClasses(void)  
+CLuaClass::MetaTableDerive(void)  
+CLuaClass::Push(void *)  
+CLuaClass::~CLuaClass()  
+
+- [ ] Add CLuaManager (Based off CLuaClass)  
+CLuaManager::CreateEntity(char const*)  
+CLuaManager::RunScript(char const*, char const*, bool, char const*)  
+CLuaManager::RunScriptsInFolder(char const*, char const*)  
+CLuaManager::ScriptExists(char const*, char const*)  
+CLuaManager::SendScriptsInFolder(char const*, char const*)  
+CLuaManager::Startup(void)  
+
+- [ ] Add CLuaGameEventListener  
+CLuaGameEventListener::FireGameEvent(IGameEvent *)  
+CLuaGameEventListener::Init(void)  
+CLuaGameEventListener::LevelShutdownPostEntity(void)  
+CLuaGameEventListener::Name(void)  
+CLuaGameEventListener::~CLuaGameEventListener()  
+
+- [ ] Add CLuaGameSystem (based off CBaseGameSystem or IGameSystemPerFrame)  
+CLuaGameSystem::FireGameEvent(IGameEvent *)  
+CLuaGameSystem::FrameUpdatePostEntityThink(void)  
+CLuaGameSystem::FrameUpdatePreEntityThink(void)  
+CLuaGameSystem::Init(void)  
+CLuaGameSystem::LevelInitPostEntity(void)  
+CLuaGameSystem::LevelInitPreEntity(void)  
+CLuaGameSystem::LevelShutdownPostEntity(void)  
+CLuaGameSystem::LevelShutdownPreEntity(void)  
+CLuaGameSystem::Name(void)  
+CLuaGameSystem::OnRestore(void)  
+CLuaGameSystem::OnSave(void)  
+CLuaGameSystem::PostInit(void)  
+CLuaGameSystem::PreClientUpdate(void)  
+CLuaGameSystem::SafeRemoveIfDesired(void)  
+CLuaGameSystem::Shutdown(void)  
+CLuaGameSystem::~CLuaGameSystem()  
+
+- [ ] Add CLuaGameCallback  
+CLuaGameCallback::CreateLuaObject(void)  
+CLuaGameCallback::DestroyLuaObject(ILuaObject *)  
+CLuaGameCallback::ErrorPrint(char const*, bool)  
+CLuaGameCallback::InterfaceCreated(ILuaInterface *) = {}  
+CLuaGameCallback::LuaError(CLuaError *)  
+LuaGameCallback::Msg(char const*, bool)  
+CLuaGameCallback::MsgColour(char const*, Color const&)  
+
+- [ ] Add CLuaGameEnums (This will be a huge pain)  
+CLuaGameEnums::InitLibraries(ILuaInterface *)  
+CLuaGameEnums::~CLuaGameEnums() __ZN13CLuaGameEnumsD1Ev  
+CLuaGameEnums::~CLuaGameEnums() __ZN13CLuaGameEnumsD0Ev  
+
+- [ ] Add CLuaSENTManager  
+CLuaSENTManager::CLuaSENTManager(void)  
+CLuaSENTManager::CreateEntity(char const*)  
+CLuaSENTManager::LoadScript(char const*)  
+CLuaSENTManager::LoadScripts(void)  
+CLuaSENTManager::ReloadSpecific(char const*)  
+CLuaSENTManager::~CLuaSENTManager()  
+
+- [ ] Add CLuaSWEPManager  
+CLuaSWEPManager::CLuaSWEPManager(void)  
+CLuaSWEPManager::CreateEntity(char const*)  
+CLuaSWEPManager::LoadScript(char const*)  
+CLuaSWEPManager::LoadScripts(void)  
+CLuaSWEPManager::ReloadSpecific(char const*)  
+CLuaSWEPManager::~CLuaSWEPManager()  
+
+- [ ] Add CLuaEffectManager  
+CLuaEffectManager::CLuaEffectManager(void)  
+CLuaEffectManager::LoadScript(char const*)  
+CLuaEffectManager::LoadScripts(void)  
+CLuaEffectManager::ReloadSpecific(char const*)
+CLuaEffectManager::~CLuaEffectManager()  
+
+- [ ] Add all other CLua*  
+- [ ] Add CGMOD_Player (Based off CHL2MP_Player)  
+- [ ] Add Push_* (like Push_Entity, Push_CTakeDamageInfo and so on)  
+- [ ] Add GarrysMod::*  
+- [ ] Add GModDataPack::*  
+- [ ] Add ILuaInterface::UserGet<CBaseEntity>(int) Coulg get useful. __ZN13ILuaInterface7UserGetI11CBaseEntityEEPT_i  
+- [ ] Add all Lua::  

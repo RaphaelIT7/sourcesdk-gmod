@@ -2874,7 +2874,7 @@ inline void CAI_Component::TaskFail( const char *pszGeneralFailText )
 
 inline void CAI_Component::TaskComplete( bool fIgnoreSetFailedCondition )
 {
-	GetOuter()->TaskComplete( fIgnoreSetFailedCondition );
+	//GetOuter()->TaskComplete( fIgnoreSetFailedCondition );
 }
 //-----------------------------------------------------------------------------
 

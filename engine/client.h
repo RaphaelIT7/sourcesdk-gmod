@@ -129,8 +129,7 @@ public: // IServerMessageHandlers
 	PROCESS_SVC_MESSAGE( PacketEntities );
 	PROCESS_SVC_MESSAGE( TempEntities );
 	PROCESS_SVC_MESSAGE( Prefetch );
-	PROCESS_SVC_MESSAGE( SetPauseTimed );
-	PROCESS_SVC_MESSAGE( SVC_GMod_ServerToClient );
+	PROCESS_SVC_MESSAGE( GMod_ServerToClient );
 
 public:
 
@@ -272,7 +271,7 @@ private:
 	bool		m_bMarkedCRCsUnverified;
 };  //CClientState
 
-extern	CClientState	cl;
+//extern	CClientState	cl;
 
 #ifndef SWDS
 extern CGlobalVarsBase g_ClientGlobalVariables;

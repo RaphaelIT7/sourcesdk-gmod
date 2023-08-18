@@ -56,6 +56,7 @@
 #include "sv_ipratelimit.h"
 #include "cl_steamauth.h"
 #include "sv_filter.h"
+#include "threadtools.h"
 
 #if defined( _X360 )
 #include "xbox/xbox_win32stubs.h"
@@ -2135,7 +2136,7 @@ void CBaseServer::Shutdown( void )
 	}
 
 	// Let drop messages go out
-	Sys_Sleep( 100 );
+	ThreadSleep(100);
 
 	// clear everything
 	Clear();
@@ -2266,7 +2267,7 @@ void CBaseServer::WriteTempEntities( CBaseClient *client, CFrameSnapshot *pCurre
 	bool bDebug = sv_debugtempentities.GetBool();
 
 	// limit max entities to field bit length
-	ev_max = min( ev_max, ((1<<CEventInfo::EVENT_INDEX_BITS)-1) );
+	ev_max = MIN( ev_max, ((1<<CEventInfo::EVENT_INDEX_BITS)-1) );
 
 	if ( pLastSnapshot )
 	{
@@ -2545,8 +2546,8 @@ void CBaseServer::SetPausedForced( bool bPaused, float flDuration /*= -1.f*/ )
 		return;
 
 	m_State = ( bPaused ) ? ss_paused : ss_active;
-	m_flPausedTimeEnd = ( bPaused && flDuration > 0.f ) ? Sys_FloatTime() + flDuration : -1.f;
+	//m_flPausedTimeEnd = ( bPaused && flDuration > 0.f ) ? Sys_FloatTime() + flDuration : -1.f;
 
-	SVC_SetPauseTimed setpause( bPaused, m_flPausedTimeEnd );
-	BroadcastMessage( setpause );
+	//SVC_SetPauseTimed setpause( bPaused, m_flPausedTimeEnd );
+	//BroadcastMessage( setpause );
 }

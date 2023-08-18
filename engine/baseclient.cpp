@@ -1387,7 +1387,7 @@ void CBaseClient::UpdateSendState( void )
 	else if ( IsActive() )	// multiplayer mode
 	{
 		// snapshot mode: send snapshots frequently
-		float maxDelta = min ( m_Server->GetTickInterval(), m_fSnapshotInterval );
+		float maxDelta = MIN ( m_Server->GetTickInterval(), m_fSnapshotInterval );
 		float delta = clamp( (float)( net_time - m_fNextMessageTime ), 0.0f, maxDelta );
 		m_fNextMessageTime = net_time + m_fSnapshotInterval - delta;
 	}
