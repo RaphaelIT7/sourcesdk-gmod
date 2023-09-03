@@ -28,3 +28,45 @@ class CGMod_Audio : public IGMod_Audio
 	void PlayURL(const char*, const char*, int*);
 	void PlayFile(const char*, const char*, int*);
 }
+
+class GModChannelFFT_t; // Probably a struct.
+// void* = Unsure of the return value
+class CGModAudioChannel
+{
+	void Destroy();
+	void* Stop();
+	void* Pause();
+	void* Play();
+	void* SetVolume(float);
+	float GetVolume(); // ToDo: Verify return value
+	void* SetPlaybackRate(float);
+	float GetPlaybackRate(); // ToDo: Verify return value
+	void SetPos(Vector*, Vector*, Vector*);
+	void GetPos(Vector*, Vector*, Vector*);
+	void* SetTime(double, bool);
+	double GetTime(); // ToDo: Verify return value
+	void Set3DFadeDistance(float, float);
+	void Get3DFadeDistace(float, float);
+	void Set3DCone(int, int, float);
+	void Get3DCone(int*, int*, float*);
+	void* GetState();
+	void* SetLooping(bool);
+	bool IsLooping(); // ToDo: Verify return value
+	bool IsOnline();
+	bool Is3D();
+	bool IsBlockStreamed();
+	bool IsValid();
+	double GetLength();
+	char* GetFileName();
+	void* GetSamplingRate(); // It probably returns an int or double.
+	void* GetBitsPerSample();
+	void* GetAverageBitRate();
+	void GetLevel(float*, float*);
+	void FFT(float*, GModChannelFFT_t);
+	void* SetChannelPan(float);
+	float GetChannelPan();
+	void* GetTags(int);
+	void Set3DEnabled(bool);
+	bool Get3DEnabled();
+	void* Restart();
+}
