@@ -4,7 +4,7 @@
 class IGMod_Audio
 {
 	virtual std::string GetErrorString(int) = 0;
-	virtual void Init(void* (*)(const char*, int*)) = 0; // ToDo: Get the correct return value
+	virtual void Init(CreateInterfaceFn) = 0; // ToDo: Get the correct return value
 	virtual void Shutdown() = 0; // ToDo: Get the correct return value
 	virtual void CreateAudioStream(IAudioStreamEvent*) = 0; // ToDo: Get the correct return value
 	virtual void SetGlobalVolume(float) = 0; // ToDo: Get the correct return value
@@ -17,7 +17,7 @@ class IGMod_Audio
 
 class CGMod_Audio : public IGMod_Audio
 {
-	void Init(void* (*)(const char*, int*));
+	void Init(CreateInterfaceFn);
 	std::string GetErrorString(int);
 	void Shutdown();
 	void CreateAudioStream(IAudioStreamEvent*);
