@@ -8,12 +8,6 @@ newoption({
     default = "../../gmod-tdm-stuff/development/garrysmod_common"
 })
 
-newoption({
-    trigger = "sourcesdk",
-    description = "Sets the path to the sourcesdk directory",
-    default = "../"
-})
-
 local gmcommon = assert(_OPTIONS.gmcommon or os.getenv("GARRYSMOD_COMMON"),
     "you didn't provide a path to your garrysmod_common (https://github.com/danielga/garrysmod_common) directory")
 include(gmcommon)
@@ -50,7 +44,6 @@ CreateWorkspace({name = "gmod_audio", abi_compatible = false})
         targetsuffix("")
 
         files({
-            [[..\public\tier2\tier2.cpp]],
             [[..\gmod\cgmod_audio.cpp]],
         })
 
