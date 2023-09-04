@@ -1,0 +1,15 @@
+name: Build SourceSDK
+
+on: [pull_request, workflow_dispatch]
+
+jobs:
+  build_gmod_audio:
+    uses: RaphaelIT7/gmod-common-module-base/.github/workflows/compile.yml@workflow
+    with:
+      PROJECT_NAME: "gmod_audio"
+      PROJECT_PATH: "gmod_audio/"
+      USE_PREFIX: "false"
+      SOURCESDK_MINIMAL: "RaphaelIT7/sourcesdk-gmod"
+      SOURCESDK_MINIMAL_BRANCH: "main"
+      LINUX_FILEEXTENTION: "so"
+      BUILD_WINDOWS: "true"
