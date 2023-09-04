@@ -10,18 +10,42 @@ CBassAudioStream::CBassAudioStream()
 	// IDK
 }
 
+void CALLBACK MyFileCloseProcc(void *user)
+{
+	fclose((FILE*)user); // close the file
+}
+
+QWORD CALLBACK MyFileLenProcc(void *user)
+{
+	struct stat s;
+	fstat(fileno((FILE*)user), &s);
+	return s.st_size; // return the file length
+}
+
+DWORD CALLBACK MyFileReadProcc(void *buffer, DWORD length, void *user)
+{
+	return fread(buffer, 1, length, (FILE*)user); // read from file
+}
+
+BOOL CALLBACK MyFileSeekProcc(QWORD offset, void* user)
+{
+	return !fseek((FILE*)user, offset, SEEK_SET); // seek to offset
+}
+
 void CBassAudioStream::Init(IAudioStreamEvent* event)
 {
-	m_hStream = BASS_StreamCreateFileUser(STREAMFILE_NOBUFFER, BASS_STREAM_AUTOFREE, nullptr, nullptr);
+	BASS_FILEPROCS fileprocs={MyFileCloseProcc, MyFileLenProcc, MyFileReadProcc, MyFileSeekProcc};
+
+	m_hStream = BASS_StreamCreateFileUser(STREAMFILE_NOBUFFER, BASS_STREAM_AUTOFREE, &fileprocs, event); // ToDo: FIX THIS. event should be a FILE* not a IAudioStreamEvent* -> Crash
 
 	if (m_hStream == 0) {
 		Warning("Couldn't create BASS audio stream (%i)", BASS_ErrorGetCode()); // ToDo: Use BassErrorToString(int)
 	}
 }
 
-void CALLBACK CBassAudioStream::MyFileCloseProc(FILE* user)
+void CALLBACK CBassAudioStream::MyFileCloseProc(void* user)
 {
-	fclose(user);
+	fclose((FILE*)user);
 }
 
 QWORD CALLBACK CBassAudioStream::MyFileLenProc(FILE* user)
@@ -114,7 +138,7 @@ int CGMod_Audio::Init(CreateInterfaceFn interfaceFactory)
 
 	BASS_SetConfig(BASS_CONFIG_UPDATEPERIOD, 36);
 
-	if(!BASS_Init(0, 0, BASS_DEVICE_DEFAULT, 0, nullptr)) {
+	if(!BASS_Init(0, 44100, 0, 0, NULL)) {
 		Warning("BASS_Init failed(%i)! Attempt 1.\n", BASS_ErrorGetCode());
 
 		if(!BASS_Init(0, 0, BASS_DEVICE_DEFAULT, 0, nullptr)) {
@@ -133,7 +157,7 @@ int CGMod_Audio::Init(CreateInterfaceFn interfaceFactory)
 							Warning("BASS_Init failed(%i)! Attempt 6.\n", BASS_ErrorGetCode());
 
 							if(!BASS_Init(0, 0, 0, 0, nullptr)) {
-								Error("Couldn't Init Bass (%i)!", BASS_ErrorGetCode());
+								//Error("Couldn't Init Bass (%i)!", BASS_ErrorGetCode());
 							}
 						}
 					}
@@ -291,6 +315,7 @@ int CGMod_Audio::PlayURL(const char* url, const char* flags, int* errorCode)
 	return stream;
 }
 
+// The original function is too fucked up. https://i.imgur.com/xz5xAIJ.png
 int CGMod_Audio::PlayFile(const char* filePath, const char* flags, int* errorCode)
 {
 	*errorCode = 0;
@@ -329,3 +354,79 @@ int CGMod_Audio::PlayFile(const char* filePath, const char* flags, int* errorCod
 }
 
 EXPOSE_SINGLE_INTERFACE_GLOBALVAR(CGMod_Audio, IGMod_Audio, "IGModAudio001", g_CGMod_Audio);
+
+
+void CGModAudioChannel::Destroy() {
+	if (BASS_ChannelIsActive(handle) == 1) {
+		if (BASS_ChannelFree(handle) == FALSE) {
+		}
+	} else {
+		int streamFlags = BASS_ChannelFlags(handle, 0, 0);
+		if (!(streamFlags & BASS_STREAM_DECODE)) {
+			if (BASS_StreamFree(handle) == FALSE) {
+			}
+		} else {
+			if (BASS_MusicFree(handle) == FALSE) {
+			}
+		}
+	}
+
+	delete this;
+}
+
+void CGModAudioChannel::Stop()
+{
+	BASS_ChannelStop(handle);
+}
+
+void CGModAudioChannel::Pause()
+{
+	BASS_ChannelPause(handle);
+}
+
+void CGModAudioChannel::Play()
+{
+	BASS_ChannelPlay(handle, false);
+}
+
+void CGModAudioChannel::SetVolume(float volume)
+{
+	BASS_ChannelSetAttribute(handle, BASS_ATTRIB_VOL, volume);
+}
+
+float CGModAudioChannel::GetVolume()
+{
+	float volume = 0.0f;
+	BASS_ChannelGetAttribute(handle, BASS_ATTRIB_VOL, &volume);
+
+	return volume;
+}
+
+void CGModAudioChannel::SetPlaybackRate(float speed)
+{
+	BASS_ChannelSetAttribute(handle, BASS_ATTRIB_FREQ, speed);
+}
+
+float freq_default = 44100;
+float CGModAudioChannel::GetPlaybackRate()
+{
+	//int playbackRate = reinterpret_cast<int(__thiscall*)(void*)>(vtable[100])(thisPtr);
+	int playbackRate = freq_default;
+	//if (playbackRate <= 0) {
+	//	playbackRate = freq_default;
+	//}
+
+	float currentPlaybackRate = 0.0f;
+	BASS_ChannelGetAttribute(handle, BASS_ATTRIB_FREQ, &currentPlaybackRate);
+
+	return currentPlaybackRate / static_cast<float>(playbackRate);
+}
+
+void CGModAudioChannel::FFT(float *data, GModChannelFFT_t channelFFT)
+{
+	if (BASS_ChannelIsActive(handle) == 1) {
+		void* buffer;
+
+		BASS_ChannelGetData(handle, buffer, channelFFT);
+	}
+}

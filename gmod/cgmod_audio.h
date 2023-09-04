@@ -7,7 +7,7 @@ class CBassAudioStream
 public:
 	CBassAudioStream();
 	void Init(IAudioStreamEvent*);
-	void CALLBACK MyFileCloseProc(FILE*);
+	void CALLBACK MyFileCloseProc(void*);
 	QWORD CALLBACK MyFileLenProc(FILE*);
 	DWORD CALLBACK MyFileReadProc(void*, DWORD, FILE*);
 	BOOL CALLBACK MyFileSeekProc(QWORD, FILE*);
@@ -23,15 +23,25 @@ private:
 	HSTREAM m_hStream;
 };
 
-class GModChannelFFT_t; // Probably a struct.
+enum GModChannelFFT_t {
+	FFT_256 = 0,
+	FFT_512 = 1,
+	FFT_1024 = 2,
+	FFT_2048 = 3,
+	FFT_4096 = 4,
+	FFT_8192 = 5,
+	FFT_16384 = 6,
+	FFT_32768 = 7,
+};
+
 class CGModAudioChannel
 {
 	void Destroy();
-	void Stop(); // ToDo: Get the correct return value
-	void Pause(); // ToDo: Get the correct return value
-	void Play(); // ToDo: Get the correct return value
-	void SetVolume(float); // ToDo: Get the correct return value
-	float GetVolume(); // ToDo: Verify return value
+	void Stop();
+	void Pause();
+	void Play();
+	void SetVolume(float);
+	float GetVolume();
 	void SetPlaybackRate(float); // ToDo: Get the correct return value
 	float GetPlaybackRate(); // ToDo: Verify return value
 	void SetPos(Vector*, Vector*, Vector*);
@@ -62,6 +72,8 @@ class CGModAudioChannel
 	void Set3DEnabled(bool);
 	bool Get3DEnabled();
 	void Restart(); // ToDo: Get the correct return value
+private:
+	DWORD handle;
 };
 
 class IGMod_Audio
