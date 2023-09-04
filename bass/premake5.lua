@@ -2,7 +2,7 @@ local current_dir = _SCRIPT_DIR
 
 print("Include")
 function IncludeBass()
-	//IncludePackage("bass")
+	--IncludePackage("bass")
 
 	local _project = project()
 
