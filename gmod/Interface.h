@@ -17,7 +17,7 @@ struct lua_State
     #error Unsupported platform
 #endif
 
-    GarrysMod::Lua::ILuaBase* luabase;
+    ILuaBase* luabase;
 };
 
 #ifndef GMOD
@@ -38,40 +38,40 @@ struct lua_State
         #define LUA_FUNCTION_STATIC( name ) static LUA_FUNCTION( name )
     #else
         #define GMOD_MODULE_OPEN()                                  \
-            int gmod13_open__Imp( GarrysMod::Lua::ILuaBase* LUA );  \
+            int gmod13_open__Imp( ILuaBase* LUA );  \
             GMOD_DLL_EXPORT int gmod13_open( lua_State* L )         \
             {                                                       \
                 return gmod13_open__Imp( L->luabase );              \
             }                                                       \
-            int gmod13_open__Imp( GarrysMod::Lua::ILuaBase* LUA )
+            int gmod13_open__Imp( ILuaBase* LUA )
 
         #define GMOD_MODULE_CLOSE()                                 \
-            int gmod13_close__Imp( GarrysMod::Lua::ILuaBase* LUA ); \
+            int gmod13_close__Imp( ILuaBase* LUA ); \
             GMOD_DLL_EXPORT int gmod13_close( lua_State* L )        \
             {                                                       \
                 return gmod13_close__Imp( L->luabase );             \
             }                                                       \
-            int gmod13_close__Imp( GarrysMod::Lua::ILuaBase* LUA )
+            int gmod13_close__Imp( ILuaBase* LUA )
 
         #define LUA_FUNCTION( FUNC )                            \
-            int FUNC##__Imp( GarrysMod::Lua::ILuaBase* LUA );   \
+            int FUNC##__Imp( ILuaBase* LUA );   \
             int FUNC( lua_State* L )                            \
             {                                                   \
-                GarrysMod::Lua::ILuaBase* LUA = L->luabase;     \
+                ILuaBase* LUA = L->luabase;     \
                 LUA->SetState(L);                               \
                 return FUNC##__Imp( LUA );                      \
             }                                                   \
-            int FUNC##__Imp( GarrysMod::Lua::ILuaBase* LUA )
+            int FUNC##__Imp( ILuaBase* LUA )
 
         #define LUA_FUNCTION_STATIC( FUNC )                             \
-            static int FUNC##__Imp( GarrysMod::Lua::ILuaBase* LUA );    \
+            static int FUNC##__Imp( ILuaBase* LUA );    \
             static int FUNC( lua_State* L )                             \
             {                                                           \
-                GarrysMod::Lua::ILuaBase* LUA = L->luabase;             \
+                ILuaBase* LUA = L->luabase;             \
                 LUA->SetState(L);                                       \
                 return FUNC##__Imp( LUA );                              \
             }                                                           \
-            static int FUNC##__Imp( GarrysMod::Lua::ILuaBase* LUA )
+            static int FUNC##__Imp( ILuaBase* LUA )
 
         #define LUA_FUNCTION_DECLARE( FUNC ) \
             int FUNC( lua_State *L )
@@ -80,12 +80,12 @@ struct lua_State
             static int FUNC( lua_State *L )
 
         #define LUA_FUNCTION_IMPLEMENT( FUNC ) \
-            static int FUNC##__Imp( GarrysMod::Lua::ILuaBase* LUA )
+            static int FUNC##__Imp( ILuaBase* LUA )
 
         #define LUA_FUNCTION_WRAP( FUNC )                   \
             LUA_FUNCTION_STATIC_DECLARE( FUNC )             \
             {                                               \
-                GarrysMod::Lua::ILuaBase* LUA = L->luabase; \
+                ILuaBase* LUA = L->luabase; \
                 LUA->SetState(L);                           \
                 return FUNC##__Imp( LUA );                  \
             }
