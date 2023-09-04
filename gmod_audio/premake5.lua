@@ -11,15 +11,15 @@ newoption({
 local gmcommon = assert(_OPTIONS.gmcommon or os.getenv("GARRYSMOD_COMMON"),
     "you didn't provide a path to your garrysmod_common (https://github.com/danielga/garrysmod_common) directory")
 include(gmcommon)
-include("../overrides.lua")
+include("../additional.lua")
 
-CreateWorkspace({name = "gmod_audio", abi_compatible = false})
+CreateWorkspace2({name = "gmod_audio", abi_compatible = false})
     -- Serverside module (gmsv prefix)
     -- Can define "source_path", where the source files are located
     -- Can define "manual_files", which allows you to manually add files to the project,
     -- instead of automatically including them from the "source_path"
     -- Can also define "abi_compatible", for project specific compatibility
-    CreateProject({serverside = false, manual_files = false})
+    CreateProject2({serverside = false, manual_files = false})
         kind "SharedLib"
         symbols "On"
         -- Remove some or all of these includes if they're not needed
