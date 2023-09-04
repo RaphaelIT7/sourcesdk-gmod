@@ -1,6 +1,8 @@
 #include "interface.h"
 #include "tier3.h"
 #include "cgmod_audio.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 /*
 CBassAudioStream
@@ -12,24 +14,24 @@ CBassAudioStream::CBassAudioStream()
 
 void CALLBACK MyFileCloseProcc(void *user)
 {
-	fclose((FILE*)user); // close the file
+	fclose((FILE*)user)
 }
 
 QWORD CALLBACK MyFileLenProcc(void *user)
 {
-	struct stat s;
-	fstat(fileno((FILE*)user), &s);
-	return s.st_size; // return the file length
+	struct stat finfo;
+	fstat(fileno((FILE*)user), &finfo); // Crash: It crashes here because we fucked up in CBassAudioStream::Init
+	return finfo.st_size;
 }
 
 DWORD CALLBACK MyFileReadProcc(void *buffer, DWORD length, void *user)
 {
-	return fread(buffer, 1, length, (FILE*)user); // read from file
+	return fread(buffer, 1, length, (FILE*)user);
 }
 
 BOOL CALLBACK MyFileSeekProcc(QWORD offset, void* user)
 {
-	return !fseek((FILE*)user, offset, SEEK_SET); // seek to offset
+	return !fseek((FILE*)user, offset, SEEK_SET);
 }
 
 void CBassAudioStream::Init(IAudioStreamEvent* event)
@@ -50,9 +52,9 @@ void CALLBACK CBassAudioStream::MyFileCloseProc(void* user)
 
 QWORD CALLBACK CBassAudioStream::MyFileLenProc(FILE* user)
 {
-	struct stat s;
-	fstat(fileno(user), &s);
-	return s.st_size;
+	struct stat finfo;
+	fstat(fileno((FILE*)user), &finfo);
+	return finfo.st_size;
 }
 
 DWORD CALLBACK CBassAudioStream::MyFileReadProc(void *buffer, DWORD length, FILE *user)
