@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "LuaBase.h"
+#include "ILuaBase.h"
 #include "SourceCompat.h"
 
 namespace Bootil
