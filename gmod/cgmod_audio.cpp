@@ -432,3 +432,23 @@ void CGModAudioChannel::FFT(float *data, GModChannelFFT_t channelFFT)
 		BASS_ChannelGetData(handle, buffer, channelFFT);
 	}
 }
+
+void CGModAudioChannel::SetPos(Vector* earPosition, Vector* earForward, Vector* earUp) {
+	BASS_3DVECTOR earPos;
+	earPos.x = earPosition->x;
+	earPos.y = earPosition->y;
+	earPos.z = earPosition->z;
+
+	BASS_3DVECTOR earDir;
+	earDir.x = earForward->x;
+	earDir.y = earForward->y;
+	earDir.z = earForward->z;
+
+	BASS_3DVECTOR earUpVec;
+	earUpVec.x = earUp->x;
+	earUpVec.y = earUp->y;
+	earUpVec.z = earUp->z;
+
+	BASS_ChannelSet3DPosition(handle, &earPos, &earDir, &earUpVec);
+	BASS_Apply3D();
+}
