@@ -728,6 +728,12 @@ CON_COMMAND( plugin_load, "plugin_load <filename> : loads a plugin" )
 		}
 		else
 		{
+			if ( !COM_IsValidPath( args[1] ) )
+			{
+				ConMsg( "plugin_load %s: invalid path.\n", args[1] );
+				return;
+			}
+
 			if ( !g_pServerPluginHandler->LoadPlugin( args[1] ) )
 			{
 				Warning( "Unable to load plugin \"%s\"\n", args[1] );

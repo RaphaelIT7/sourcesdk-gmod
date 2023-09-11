@@ -1997,6 +1997,13 @@ void CL_ListDemo_f( const CCommand &args )
 	if ( cmd_source != src_command )
 		return;
 
+	// check path first
+	if ( !COM_IsValidPath( args[1] ) )
+	{
+		ConMsg( "listdemo %s: invalid path.\n", args[1] );
+		return;
+	}
+
 	// Find the file
 	char name[MAX_OSPATH];
 
@@ -2147,6 +2154,13 @@ void CL_PlayDemo_f( const CCommand &args )
 	Q_strncpy( name, args[1], sizeof( name ) );
 	Q_DefaultExtension( name, ".dem", sizeof( name ) );
 
+	// check path first
+	if ( !COM_IsValidPath( args[1] ) )
+	{
+		ConMsg( "playdemo %s: invalid path.\n", args[1] );
+		return;
+	}
+
 	// set current demo player to replay demo player?
 	demoplayer = g_pClientDemoPlayer;
 
@@ -2189,6 +2203,13 @@ void CL_TimeDemo_f( const CCommand &args )
 		Q_strncpy( g_pStatsFile, "UNKNOWN", sizeof( g_pStatsFile ) );
 	}
 
+	// check path first
+	if ( !COM_IsValidPath( args[1] ) )
+	{
+		ConMsg( "timedemo %s: invalid path.\n", args[1] );
+		return;
+	}
+
 	// set current demo player to client demo player
 	demoplayer = g_pClientDemoPlayer;
 	
@@ -2217,6 +2238,13 @@ void CL_BenchFrame_f( const CCommand &args )
 	if ( args.ArgC() != 4 )
 	{
 		ConMsg ("benchframe <demoname> <frame> <tgafilename>: takes a snapshot of a particular frame in a demo\n");
+		return;
+	}
+
+	// check path first
+	if ( !COM_IsValidPath( args[1] ) )
+	{
+		ConMsg( "benchframe %s: invalid path.\n", args[1] );
 		return;
 	}
 
