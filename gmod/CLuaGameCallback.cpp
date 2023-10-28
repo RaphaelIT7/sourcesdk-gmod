@@ -1,4 +1,12 @@
 #include "ILuaGameCallback.h"
+#include "Colors.h"
+
+Color server_msg(156, 241, 255, 200);
+Color server_error(136, 221, 255, 255);
+//Color client_msg(255, 241, 122, 200);
+//Color client_error(255, 221, 102, 255);
+//Color menu_msg(100, 220, 100, 200);
+//Color menu_error(120, 220, 100, 255);
 
 class CLuaGameCallback : public ILuaGameCallback
 {
@@ -15,105 +23,38 @@ public:
 
 	GarrysMod::Lua::ILuaObject *CreateLuaObject( )
 	{
-		return callback->CreateLuaObject( );
+		return new CLuaObject();
 	}
 
 	void DestroyLuaObject( GarrysMod::Lua::ILuaObject *obj )
 	{
-		callback->DestroyLuaObject( obj );
+		delete pObject;
 	}
 
 	void ErrorPrint( const char *error, bool print )
 	{
-		callback->ErrorPrint( error, print );
+		// Write into the lua_errors_server.txt if error logging is enabled.
+
+		Color ErrorColor = server_error; // ToDo: Change this later and finish this function.
+		ColorSpewMessage(SPEW_MESSAGE, &ErrorColor, "%s\n", error);
 	}
 
 	void Msg( const char *msg, bool useless )
 	{
-		callback->Msg( msg, useless );
+		MsgColour(msg, server_msg);
 	}
 
 	void MsgColour( const char *msg, const Color &color )
 	{
-		callback->MsgColour( msg, color );
+		ColorSpewMessage(SPEW_MESSAGE, &color, "%s\n", msg);
 	}
 
 	void LuaError( const CLuaError *error )
 	{
-		const std::string &error_str = runtime ? runtime_error : error->message;
-
-		common::ParsedError parsed_error;
-		if( entered_hook || !common::ParseError( error_str, parsed_error ) )
-			return callback->LuaError( error );
-
-		const int32_t funcs = LuaHelpers::PushHookRun( lua, "LuaError" );
-		if( funcs == 0 )
-			return callback->LuaError( error );
-
-		lua->PushBool( runtime );
-		lua->PushString( error_str.c_str( ) );
-
-		lua->PushString( parsed_error.source_file.c_str( ) );
-		lua->PushNumber( parsed_error.source_line );
-		lua->PushString( parsed_error.error_string.c_str( ) );
-
-		if( runtime )
-		{
-			runtime_stack.Push( );
-			runtime_stack.Free( );
-		}
-		else
-			PushStackTable( lua );
-
-		runtime = false;
-
-		const auto source_addon = FindWorkshopAddonFromFile( parsed_error.source_file );
-		if( source_addon == nullptr )
-		{
-			lua->PushNil( );
-			lua->PushNil( );
-		}
-		else
-		{
-			lua->PushString( source_addon->title.c_str( ) );
-			lua->PushString( std::to_string( source_addon->wsid ).c_str( ) );
-		}
-
-		entered_hook = true;
-		const bool call_success = LuaHelpers::CallHookRun( lua, 8, 1 );
-		entered_hook = false;
-		if( !call_success )
-			return callback->LuaError( error );
-
-		const bool proceed = !lua->IsType( -1, GarrysMod::Lua::Type::BOOL ) || !lua->GetBool( -1 );
-		lua->Pop( 1 );
-		if( proceed )
-			return callback->LuaError( error );
+		
 	}
 
 	void InterfaceCreated( GarrysMod::Lua::ILuaInterface *iface )
 	{
-		callback->InterfaceCreated( iface );
 	}
-
-	void SetLua( GarrysMod::Lua::ILuaInterface *iface )
-	{
-		lua = static_cast<GarrysMod::Lua::CLuaInterface *>( iface );
-		callback = lua->GetLuaGameCallback( );
-	}
-
-	void Detour( )
-	{
-		lua->SetLuaGameCallback( this );
-	}
-
-	void Reset( )
-	{
-		lua->SetLuaGameCallback( callback );
-	}
-
-private:
-	GarrysMod::Lua::CLuaInterface *lua;
-	GarrysMod::Lua::ILuaGameCallback *callback;
-	bool entered_hook = false;
 };
