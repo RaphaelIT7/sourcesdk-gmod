@@ -116,7 +116,7 @@ namespace Bootil
 		//
 		// More than 500mb - we're probably doing something wrong - right??
 		//
-		if ( iSize > 536870912 ) { return false; }
+		//if ( iSize > 536870912 ) { return false; }
 
 		if ( !m_pData )
 		{
