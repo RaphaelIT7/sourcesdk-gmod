@@ -1,4 +1,4 @@
-#include "ILuaGameCallback.h"
+#include "CLuaGameCallback.h"
 #include "Colors.h"
 
 Color server_msg(156, 241, 255, 200);
