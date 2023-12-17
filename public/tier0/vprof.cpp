@@ -1280,13 +1280,13 @@ static void DumpPMC( CVProfNode *pNode, bool &bPrintHeader, uint64 L2thresh = 1,
 
 //-------------------------------------
 
-void CVProfile::SetOutputStream( StreamOut_t outputStream )
+/*void CVProfile::SetOutputStream( StreamOut_t outputStream )
 {
 	if ( outputStream != NULL )
 		m_pOutputStream = outputStream;
 	else
 		m_pOutputStream = Msg;
-}
+}*/
 
 //-------------------------------------
 
@@ -1647,12 +1647,12 @@ void CVProfile::HideBudgetGroup( int budgetGroupID, bool bHide )
 	}
 }
 
-int *CVProfile::FindOrCreateCounter( const tchar *pName, CounterGroup_t eCounterGroup )
+int64 *CVProfile::FindOrCreateCounter( const tchar *pName, CounterGroup_t eCounterGroup )
 {	
 	Assert( m_NumCounters+1 < MAXCOUNTERS );
 	if ( m_NumCounters + 1 >= MAXCOUNTERS || !InTargetThread() )
 	{
-		static int dummy;
+		static int64 dummy;
 		return &dummy;
 	}
 	int i;
@@ -1696,13 +1696,13 @@ const tchar *CVProfile::GetCounterName( int index ) const
 	return m_CounterNames[index];
 }
 
-int CVProfile::GetCounterValue( int index ) const
+int64 CVProfile::GetCounterValue( int index ) const
 {
 	Assert( index >= 0 && index < m_NumCounters );
 	return m_Counters[index];
 }
 
-const tchar *CVProfile::GetCounterNameAndValue( int index, int &val ) const
+const tchar *CVProfile::GetCounterNameAndValue( int index, long long &val ) const
 {
 	Assert( index >= 0 && index < m_NumCounters );
 	val = m_Counters[index];
